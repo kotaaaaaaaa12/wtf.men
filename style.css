@@ -617,21 +617,37 @@ button:focus-visible {
   .headline { font-size: clamp(56px, 17vw, 86px); margin-bottom: 25px; }
   .subtitle { font-size: 15px; }
   .cards-grid { grid-template-columns: 1fr; }
-  .projects-card { grid-column: auto; min-height: 520px; }
+  .projects-card { grid-column: auto; min-height: 405px; }
   .stats-card,
   .owner-card { grid-column: auto; min-height: 390px; }
+
   .tags {
-    grid-template-columns: 1fr;
-    min-height: 425px;
-    gap: 16px;
-    padding-inline: 4px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 315px;
+    column-gap: 8px;
+    row-gap: 24px;
+    align-content: center;
+    padding: 8px 0 4px;
   }
+
   .tag {
     min-height: 42px;
-    padding-inline: 14px;
-    font-size: 12px;
-    justify-self: center !important;
+    max-width: 100%;
+    padding-inline: 12px;
+    font-size: 11px;
     grid-column: auto !important;
+  }
+
+  .tag.black {
+    justify-self: start !important;
+  }
+
+  .tag.white {
+    justify-self: end !important;
+  }
+
+  .tag.booth-downloader {
+    justify-self: start !important;
   }
   .footer { flex-direction: column; }
   .about-panel { padding: 20px; }
@@ -639,16 +655,18 @@ button:focus-visible {
   .about-facts { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 430px) {
-  .tag.chaos-texture,
-  .tag.chaos-maker,
-  .tag.booth-downloader {
-    font-size: 11px;
-    padding-inline: 11px;
-  }
-}
-
 @media (max-width: 390px) {
+  .tags {
+    column-gap: 5px;
+    row-gap: 22px;
+  }
+
+  .tag {
+    padding-inline: 10px;
+    font-size: 10.5px;
+  }
+
+
   .logo { padding-inline: 8px; font-size: 12px; }
   .nav-link { padding-inline: 7px; font-size: 11px; }
   .nav-cta { padding-inline: 10px; font-size: 11px; }
