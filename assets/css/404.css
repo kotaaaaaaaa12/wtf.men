@@ -1,0 +1,319 @@
+:root {
+  --bg: #efede4;
+  --card: #f8f5eb;
+  --ink: #0b0b0b;
+  --muted: #74726b;
+  --line: #ddd8c8;
+  --yellow: #f4df55;
+  --yellow-dark: #bca919;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(255,255,255,.92), transparent 38rem),
+    var(--bg);
+  color: var(--ink);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+.error-page {
+  width: min(1120px, calc(100% - 32px));
+  min-height: 100vh;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.error-top,
+.error-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.status-pill {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(248,245,235,.72);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.error-card {
+  position: relative;
+  align-self: center;
+  min-height: min(690px, calc(100vh - 160px));
+  overflow: hidden;
+  display: grid;
+  align-items: end;
+  padding: clamp(26px, 5vw, 62px);
+  border: 1px solid var(--line);
+  border-radius: clamp(30px, 5vw, 62px);
+  background: var(--card);
+  box-shadow: 0 28px 80px rgba(0,0,0,.07);
+}
+
+.error-card::after {
+  content: "";
+  position: absolute;
+  right: -9%;
+  bottom: -22%;
+  width: min(420px, 52vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--yellow);
+  opacity: .9;
+  pointer-events: none;
+}
+
+.error-number {
+  position: absolute;
+  top: clamp(-18px, -2vw, -4px);
+  left: clamp(20px, 4.5vw, 54px);
+  color: var(--ink);
+  font-size: clamp(120px, 28vw, 390px);
+  font-weight: 950;
+  line-height: .8;
+  letter-spacing: -.095em;
+  user-select: none;
+}
+
+.error-copy {
+  position: relative;
+  z-index: 2;
+  width: min(650px, 100%);
+  padding-top: clamp(180px, 28vw, 300px);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .15em;
+}
+
+h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(42px, 7vw, 88px);
+  line-height: .92;
+  letter-spacing: -.065em;
+}
+
+.lead {
+  max-width: 590px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: clamp(16px, 2.1vw, 22px);
+  line-height: 1.45;
+  letter-spacing: -.02em;
+}
+
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.home-button,
+.back-button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 17px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  transition: transform .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.home-button {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: white;
+}
+
+.back-button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+}
+
+.error-note {
+  position: absolute;
+  z-index: 2;
+  right: clamp(24px, 4vw, 52px);
+  bottom: clamp(24px, 4vw, 52px);
+  max-width: min(360px, 42%);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #393832;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.note-dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.error-note code {
+  color: var(--ink);
+  font: inherit;
+  font-weight: 900;
+  word-break: break-all;
+}
+
+.error-footer {
+  padding: 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-button:hover {
+    transform: translateY(-2px);
+    background: var(--yellow);
+    border-color: var(--yellow-dark);
+    color: var(--ink);
+  }
+
+  .back-button:hover {
+    transform: translateY(-2px);
+    background: white;
+  }
+
+  .brand:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 680px) {
+  .error-page {
+    width: min(100% - 20px, 1120px);
+    gap: 14px;
+    padding: 12px 0 18px;
+  }
+
+  .error-top {
+    padding: 0 4px;
+  }
+
+  .status-pill {
+    padding: 8px 10px;
+    font-size: 9px;
+  }
+
+  .error-card {
+    min-height: calc(100vh - 128px);
+    padding: 24px;
+    border-radius: 34px;
+  }
+
+  .error-number {
+    top: 18px;
+    left: 20px;
+    font-size: clamp(120px, 41vw, 190px);
+  }
+
+  .error-copy {
+    padding-top: 170px;
+    padding-bottom: 94px;
+  }
+
+  h1 {
+    font-size: clamp(46px, 13vw, 68px);
+  }
+
+  .lead {
+    margin-top: 18px;
+    font-size: 16px;
+  }
+
+  .error-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-button,
+  .back-button {
+    width: 100%;
+  }
+
+  .error-note {
+    right: 24px;
+    bottom: 24px;
+    left: 24px;
+    max-width: none;
+  }
+
+  .error-card::after {
+    right: -24%;
+    bottom: -10%;
+    width: 280px;
+  }
+
+  .error-footer {
+    padding: 0 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

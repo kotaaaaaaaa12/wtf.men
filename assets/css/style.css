@@ -838,7 +838,7 @@ button:focus-visible {
   .tag.booth-downloader {
     justify-self: start !important;
   }
-  .footer { flex-direction: column; }
+  .footer { flex-direction: row; align-items: center; }
   .about-panel { padding: 20px; }
   .about-dialog h2 { margin-top: 26px; }
   .about-facts { grid-template-columns: 1fr; }
