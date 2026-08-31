@@ -112,7 +112,7 @@
     const darkNumber = statsCard?.querySelector('.stat-dark .stat-number');
     const lightNumber = statsCard?.querySelector('.stat-light .stat-number');
     const ownerCard = document.querySelector('.owner-card');
-    const githubLogo = ownerCard?.querySelector('.owner-avatar img') ?? null;
+    const socialAvatar = ownerCard?.querySelector('.owner-avatar img') ?? null;
     const footer = document.querySelector('.footer');
 
     // Stage the whole card area only when GSAP is available. The first real
@@ -128,39 +128,39 @@
     if (lightNumber) lightNumber.textContent = '0%';
 
     let ownerCardIntroComplete = !ownerCard;
-    let githubLogoInView = !githubLogo;
-    let githubSpinStarted = false;
-    let githubSpinAnimation = null;
-    let githubObserver = null;
+    let socialAvatarInView = !socialAvatar;
+    let avatarSpinStarted = false;
+    let avatarSpinAnimation = null;
+    let avatarObserver = null;
 
-    function stopGithubSpin() {
-      githubSpinAnimation?.cancel();
-      githubSpinAnimation = null;
-      githubSpinStarted = false;
+    function stopAvatarSpin() {
+      avatarSpinAnimation?.cancel();
+      avatarSpinAnimation = null;
+      avatarSpinStarted = false;
 
-      if (!githubLogo || !ownerCard) return;
+      if (!socialAvatar || !ownerCard) return;
       ownerCard.classList.remove('github-spin-active');
-      githubLogo.style.animation = 'none';
-      githubLogo.style.transform = 'rotate(0deg)';
+      socialAvatar.style.animation = 'none';
+      socialAvatar.style.transform = 'rotate(0deg)';
     }
 
-    function startGithubSpinWhenReady() {
+    function startAvatarSpinWhenReady() {
       if (
-        githubSpinStarted ||
-        !githubLogo ||
+        avatarSpinStarted ||
+        !socialAvatar ||
         !ownerCard ||
         !ownerCardIntroComplete ||
-        !githubLogoInView
+        !socialAvatarInView
       ) {
         return;
       }
 
-      githubSpinStarted = true;
+      avatarSpinStarted = true;
 
       // Use the Web Animations API instead of a CSS class animation.
       // This guarantees there is no hidden pre-roll and no visible snap back
       // to 0deg before the spin begins.
-      githubSpinAnimation = githubLogo.animate(
+      avatarSpinAnimation = socialAvatar.animate(
         [
           { transform: 'rotate(0deg)' },
           { transform: 'rotate(360deg)' }
@@ -173,38 +173,38 @@
       );
     }
 
-    if (githubLogo) {
-      // Keep the logo frozen at exactly 0deg until it is actually visible.
-      stopGithubSpin();
+    if (socialAvatar) {
+      // Keep the avatar frozen at exactly 0deg until it is actually visible.
+      stopAvatarSpin();
 
       if ('IntersectionObserver' in window) {
-        githubObserver = new IntersectionObserver((entries) => {
+        avatarObserver = new IntersectionObserver((entries) => {
           const entry = entries[0];
-          githubLogoInView = Boolean(
+          socialAvatarInView = Boolean(
             entry?.isIntersecting && entry.intersectionRatio >= 0.5
           );
-          startGithubSpinWhenReady();
+          startAvatarSpinWhenReady();
         }, {
           threshold: [0, 0.5, 1]
         });
 
-        githubObserver.observe(githubLogo);
+        avatarObserver.observe(socialAvatar);
       } else {
         // Old browsers fall back to starting after the owner card intro.
-        githubLogoInView = true;
+        socialAvatarInView = true;
       }
 
       // Prevent a spinning state from being frozen into the back-forward cache.
-      window.addEventListener('pagehide', stopGithubSpin);
+      window.addEventListener('pagehide', stopAvatarSpin);
       window.addEventListener('pageshow', (event) => {
         if (!event.persisted) return;
-        stopGithubSpin();
+        stopAvatarSpin();
 
         requestAnimationFrame(() => {
-          const rect = githubLogo.getBoundingClientRect();
+          const rect = socialAvatar.getBoundingClientRect();
           const visibleHeight = Math.min(rect.bottom, innerHeight) - Math.max(rect.top, 0);
-          githubLogoInView = rect.height > 0 && visibleHeight >= rect.height * 0.5;
-          startGithubSpinWhenReady();
+          socialAvatarInView = rect.height > 0 && visibleHeight >= rect.height * 0.5;
+          startAvatarSpinWhenReady();
         });
       });
     }
@@ -274,7 +274,7 @@
           clearProps: 'transform',
           onComplete() {
             ownerCardIntroComplete = true;
-            startGithubSpinWhenReady();
+            startAvatarSpinWhenReady();
           }
         }, '-=0.32');
       }
