@@ -392,15 +392,17 @@ button:focus-visible {
 }
 
 .shatter-layer {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 999;
-  overflow: hidden;
+  width: 100%;
+  min-height: 100%;
+  overflow: visible;
   pointer-events: none;
 }
 
 .shard {
-  position: fixed;
+  position: absolute;
   overflow: hidden;
   pointer-events: none;
   will-change: transform, opacity;
@@ -567,9 +569,9 @@ button:focus-visible {
 }
 
 
-/* v27: shared center and flicker-free final handoff */
+/* v28: shared optical center + flicker-free final handoff */
 .shatter-trigger {
-  transform: translateX(-0.15%);
+  transform: translateX(-2.0%);
 }
 
 .shatter-trigger .headline {

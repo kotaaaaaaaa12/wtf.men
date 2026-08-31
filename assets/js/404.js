@@ -4,6 +4,16 @@ const trigger = document.querySelector('#shatter-trigger');
 const number = document.querySelector('#error-number');
 const layer = document.querySelector('#shatter-layer');
 
+function syncShatterLayerSize() {
+  if (!layer) return;
+  const height = Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight,
+    window.innerHeight
+  );
+  layer.style.height = `${height}px`;
+}
+
 const messages = [
   'what the fuck are you looking for?',
   'you found absolutely nothing.',
@@ -80,20 +90,37 @@ function getTextMetrics(text) {
 
 function createShards(text) {
   if (!trigger || !number || !layer) return [];
+  syncShatterLayerSize();
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return [];
 
   const metrics = getTextMetrics(text);
-  const rect = metrics.rect;
-  if (!rect.width || !rect.height) return [];
+  const glyphRect = metrics.rect;
+  if (!glyphRect.width || !glyphRect.height) return [];
 
-  // Use a complete rectangular tile grid.
-  // No skipped cells, no random clipping: when every shard returns to zero,
-  // the shard layer is visually identical to the real text underneath.
-  const cols = Math.max(9, Math.round(Math.sqrt(shardCountFor(rect.width, rect.height) * 2.0)));
-  const rows = Math.max(5, Math.round(cols * rect.height / rect.width * 1.45));
+  /*
+    Capture beyond the element's line box. Large Funnel Display numerals
+    visually extend below/above the measured line box, especially on iOS.
+    The extra bleed makes the shard mosaic cover every visible pixel.
+  */
+  const bleedX = Math.max(8, glyphRect.width * 0.018);
+  const bleedTop = Math.max(8, glyphRect.height * 0.08);
+  const bleedBottom = Math.max(18, glyphRect.height * 0.18);
+
+  const rect = {
+    left: glyphRect.left - bleedX,
+    top: glyphRect.top - bleedTop,
+    width: glyphRect.width + bleedX * 2,
+    height: glyphRect.height + bleedTop + bleedBottom
+  };
+
+  const cols = Math.max(10, Math.round(Math.sqrt(shardCountFor(rect.width, rect.height) * 2.2)));
+  const rows = Math.max(6, Math.round(cols * rect.height / rect.width * 1.45));
   const cellW = rect.width / cols;
   const cellH = rect.height / rows;
   const shards = [];
+
+  const pageLeft = rect.left + window.scrollX;
+  const pageTop = rect.top + window.scrollY;
 
   for (let row = 0; row < rows; row += 1) {
     for (let col = 0; col < cols; col += 1) {
@@ -102,24 +129,26 @@ function createShards(text) {
       const x1 = col === cols - 1 ? rect.width : (col + 1) * cellW;
       const y1 = row === rows - 1 ? rect.height : (row + 1) * cellH;
 
-      const w = x1 - x0;
-      const h = y1 - y0;
-
       const shard = document.createElement('span');
       shard.className = 'shard';
-      shard.style.left = `${rect.left + x0}px`;
-      shard.style.top = `${rect.top + y0}px`;
-      shard.style.width = `${w}px`;
-      shard.style.height = `${h}px`;
+      shard.style.left = `${pageLeft + x0}px`;
+      shard.style.top = `${pageTop + y0}px`;
+      shard.style.width = `${x1 - x0}px`;
+      shard.style.height = `${y1 - y0}px`;
 
       const inner = document.createElement('span');
       inner.className = 'shard-inner';
       inner.dataset.text = text;
       inner.textContent = text;
-      inner.style.left = `${-x0}px`;
-      inner.style.top = `${-y0}px`;
-      inner.style.width = `${rect.width}px`;
-      inner.style.height = `${rect.height}px`;
+
+      /*
+        The cloned text is positioned relative to the oversized capture box,
+        not the original line box.
+      */
+      inner.style.left = `${bleedX - x0}px`;
+      inner.style.top = `${bleedTop - y0}px`;
+      inner.style.width = `${glyphRect.width}px`;
+      inner.style.height = `${glyphRect.height}px`;
       inner.style.fontSize = metrics.fontSize;
       inner.style.letterSpacing = metrics.letterSpacing;
       inner.style.lineHeight = metrics.lineHeight;
@@ -128,7 +157,7 @@ function createShards(text) {
 
       shard.appendChild(inner);
       layer.appendChild(shard);
-      shards.push({ shard, rect });
+      shards.push({ shard, rect: glyphRect });
     }
   }
 
@@ -324,3 +353,5 @@ setRequestedUrl();
 setRandomMessage();
 
 trigger?.addEventListener('click', shatter404);
+window.addEventListener('resize', syncShatterLayerSize);
+syncShatterLayerSize();
