@@ -244,6 +244,7 @@
     }
 
     .tag {
+      --tag-rotation: 0deg;
       position: absolute;
       display: inline-flex;
       align-items: center;
@@ -255,14 +256,21 @@
       font-weight: 650;
       white-space: nowrap;
       box-shadow: 0 8px 18px rgba(0,0,0,.08);
-      transition: transform .2s ease;
+      transform: rotate(var(--tag-rotation));
+      transition: box-shadow .2s ease, filter .2s ease;
     }
 
-    .tag:hover { transform: translateY(-3px) rotate(0deg) !important; }
+    @media (hover: hover) and (pointer: fine) {
+      .tag:hover {
+        box-shadow: 0 12px 24px rgba(0,0,0,.13);
+        filter: brightness(.98);
+      }
+    }
     .tag.black { background: var(--black); color: #fff; }
     .tag.white { background: var(--cream); color: var(--ink); border: 1px solid rgba(0,0,0,.08); }
 
-    .tag.wishlist { top: 16%; left: 12%; transform: rotate(-4deg); }
+    .tag.wishlist { --tag-rotation: -4deg; top: 16%; left: 12%; }
+    .tag.dakuten { --tag-rotation: 3deg; top: 43%; right: 12%; }
 
     .stats-card {
       display: grid;
@@ -571,6 +579,7 @@
       .projects-card { grid-column: 1 / -1; min-height: 350px; }
       .tags { height: 245px; }
       .tag.wishlist { left: 15%; }
+      .tag.dakuten { right: 12%; }
       .tag.cloudflare { left: 8%; }
       .tag.workers { left: 56%; }
     }
@@ -617,6 +626,7 @@
       .tags { height: 275px; }
       .tag { min-height: 43px; padding-inline: 15px; font-size: 13px; }
       .tag.wishlist { left: 8%; }
+      .tag.dakuten { right: 5%; }
       .tag.cloudflare { left: 0; }
       .tag.workers { left: 52%; }
       .tag.d1 { left: 10%; }
@@ -727,13 +737,14 @@
           <h2 class="card-title">Projects</h2>
           <div class="tags" aria-label="Projects">
             <a class="tag black wishlist" href="https://wishlist.what-the-fuck.men/">Amazon Wishlist ↗</a>
+            <a class="tag white dakuten" href="https://dakuten.what-the-fuck.men/">Dakutenizer ↗</a>
           </div>
         </article>
 
         <section class="stats-card" aria-label="Site stats">
           <div class="stat-half stat-dark">
-            <div class="stat-number">1</div>
-            <p class="stat-desc">live project currently living under this domain.</p>
+            <div class="stat-number">2</div>
+            <p class="stat-desc">live projects currently living under this domain.</p>
           </div>
           <div class="stat-half stat-light">
             <div class="stat-number">100%</div>
@@ -912,7 +923,7 @@
         // Stage the whole card area only when GSAP is available. The first real
         // scroll intent starts one CodePen-style sequence for desktop and mobile.
         if (projectsCard) gsap.set(projectsCard, { autoAlpha: 0, y: 34, scale: 0.965 });
-        if (projectTags.length) gsap.set(projectTags, { autoAlpha: 0, y: 16 });
+        if (projectTags.length) gsap.set(projectTags, { autoAlpha: 0 });
         // Hide the complete stats card, not only its two inner halves. Otherwise
         // the parent border remains visible as an empty rounded rectangle.
         if (statsCard) gsap.set(statsCard, { autoAlpha: 0, y: 30, scale: 0.97 });
@@ -932,7 +943,7 @@
           window.removeEventListener('touchmove', playCardIntro);
           window.removeEventListener('keydown', handleScrollKey);
 
-          const counter = { one: 0, percent: 0 };
+          const counter = { projects: 0, percent: 0 };
           const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
           if (projectsCard) {
@@ -949,12 +960,8 @@
           if (projectTags.length) {
             timeline.to(projectTags, {
               autoAlpha: 1,
-              y: 0,
               duration: 0.52,
-              stagger: 0.06,
-              onComplete() {
-                gsap.set(projectTags, { clearProps: 'transform' });
-              }
+              stagger: 0.09
             }, '-=0.34');
           }
 
@@ -969,12 +976,12 @@
             }, '-=0.12');
 
             timeline.to(counter, {
-              one: 1,
+              projects: 2,
               percent: 100,
               duration: 0.95,
               ease: 'power2.out',
               onUpdate() {
-                if (darkNumber) darkNumber.textContent = String(Math.round(counter.one));
+                if (darkNumber) darkNumber.textContent = String(Math.round(counter.projects));
                 if (lightNumber) lightNumber.textContent = `${Math.round(counter.percent)}%`;
               }
             }, '-=0.48');
