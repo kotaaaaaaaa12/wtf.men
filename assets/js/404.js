@@ -82,26 +82,24 @@ function createShards(text) {
   const rect = metrics.rect;
   if (!rect.width || !rect.height) return [];
 
-  const cols = Math.max(7, Math.round(Math.sqrt(shardCountFor(rect.width, rect.height) * 1.7)));
-  const rows = Math.max(4, Math.round(cols * rect.height / rect.width * 1.35));
+  // Use a complete rectangular tile grid.
+  // No skipped cells, no random clipping: when every shard returns to zero,
+  // the shard layer is visually identical to the real text underneath.
+  const cols = Math.max(9, Math.round(Math.sqrt(shardCountFor(rect.width, rect.height) * 2.0)));
+  const rows = Math.max(5, Math.round(cols * rect.height / rect.width * 1.45));
   const cellW = rect.width / cols;
   const cellH = rect.height / rows;
   const shards = [];
 
   for (let row = 0; row < rows; row += 1) {
     for (let col = 0; col < cols; col += 1) {
-      if (Math.random() < 0.13) continue;
+      const x0 = col * cellW;
+      const y0 = row * cellH;
+      const x1 = col === cols - 1 ? rect.width : (col + 1) * cellW;
+      const y1 = row === rows - 1 ? rect.height : (row + 1) * cellH;
 
-      const jitterX = cellW * 0.14;
-      const jitterY = cellH * 0.14;
-
-      const x0 = Math.max(0, col * cellW - Math.random() * jitterX);
-      const y0 = Math.max(0, row * cellH - Math.random() * jitterY);
-      const x1 = Math.min(rect.width, (col + 1) * cellW + Math.random() * jitterX);
-      const y1 = Math.min(rect.height, (row + 1) * cellH + Math.random() * jitterY);
-
-      const w = Math.max(2, x1 - x0);
-      const h = Math.max(2, y1 - y0);
+      const w = x1 - x0;
+      const h = y1 - y0;
 
       const shard = document.createElement('span');
       shard.className = 'shard';
@@ -110,14 +108,9 @@ function createShards(text) {
       shard.style.width = `${w}px`;
       shard.style.height = `${h}px`;
 
-      const a = 4 + Math.random() * 18;
-      const b = 82 + Math.random() * 14;
-      const c = 82 + Math.random() * 14;
-      const d = 4 + Math.random() * 18;
-      shard.style.clipPath = `polygon(${a}% 0, 100% ${d}%, ${c}% 100%, 0 ${b}%)`;
-
       const inner = document.createElement('span');
       inner.className = 'shard-inner';
+      inner.dataset.text = text;
       inner.textContent = text;
       inner.style.left = `${-x0}px`;
       inner.style.top = `${-y0}px`;
@@ -301,8 +294,17 @@ async function shatter404() {
 
   await Promise.allSettled(returningAnimations.map((animation) => animation.finished));
 
-  layer.replaceChildren();
+  // At this point the shards are at exactly the same geometry as the real text.
+  // Reveal the original first, then remove the shard layer on the next frame.
   trigger.classList.remove('is-shattering');
+
+  await new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve);
+    });
+  });
+
+  layer.replaceChildren();
   running = false;
 }
 

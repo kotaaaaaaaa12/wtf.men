@@ -513,3 +513,44 @@ button:focus-visible {
     letter-spacing: -.055em;
   }
 }
+
+
+/* v25: pixel-matched shard reconstruction */
+.shatter-trigger {
+  display: grid;
+  place-items: center;
+}
+
+.shatter-trigger .headline,
+.shard-inner {
+  box-sizing: border-box;
+  text-align: center;
+  text-indent: 0;
+  font-kerning: normal;
+  font-variant-ligatures: normal;
+  font-feature-settings: normal;
+}
+
+.shard-inner {
+  margin: 0;
+  padding: 0;
+  transform: none;
+}
+
+/*
+  Funnel Display's "404" is mathematically centered but reads a touch right-heavy.
+  A tiny optical correction keeps the visible glyphs centered without changing
+  the geometry used by the shard reconstruction.
+*/
+#error-number:not(.is-enough) {
+  transform: translateX(-0.7%);
+}
+
+#error-number.is-enough {
+  transform: translateX(0);
+}
+
+/* The shard clone must receive the same optical correction as the real 404. */
+.shard-inner[data-text="404"] {
+  transform: translateX(-0.7%);
+}
