@@ -471,3 +471,16 @@ button:focus-visible {
     line-height: 1.3;
   }
 }
+
+
+/* v23: fifth-click easter egg */
+.shatter-trigger .headline {
+  max-width: 96vw;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .shatter-trigger .headline {
+    font-size: clamp(92px, 28vw, 148px);
+  }
+}
