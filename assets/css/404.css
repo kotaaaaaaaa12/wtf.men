@@ -473,14 +473,43 @@ button:focus-visible {
 }
 
 
-/* v23: fifth-click easter egg */
+}
+
+
+/* v24: keep 404 / ENOUGH perfectly centered and avoid size jumps */
+.shatter-trigger {
+  width: min(96vw, 980px);
+  justify-self: center;
+}
+
 .shatter-trigger .headline {
-  max-width: 96vw;
-  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(110px, 21vw, 300px);
+}
+
+.shatter-trigger .headline.is-enough,
+.shatter-trigger .headline.is-enough {
+  font-size: clamp(82px, 14vw, 205px);
+  letter-spacing: -.06em;
+}
+
+#error-number.is-enough {
+  font-size: clamp(82px, 14vw, 205px);
+  letter-spacing: -.06em;
 }
 
 @media (max-width: 760px) {
+  .shatter-trigger {
+    width: min(96vw, 520px);
+  }
+
   .shatter-trigger .headline {
-    font-size: clamp(92px, 28vw, 148px);
+    font-size: clamp(112px, 39vw, 180px);
+  }
+
+  #error-number.is-enough {
+    font-size: clamp(68px, 19vw, 112px);
+    letter-spacing: -.055em;
   }
 }

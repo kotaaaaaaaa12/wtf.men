@@ -55,21 +55,39 @@ function shardCountFor(width, height) {
   return Math.max(26, Math.min(54, Math.round(area / 2200)));
 }
 
-function createShards() {
+function getTextMetrics(text) {
+  const original = number.textContent;
+  const hadEnough = number.classList.contains('is-enough');
+
+  number.textContent = text;
+  number.classList.toggle('is-enough', text === 'ENOUGH.');
+
+  const rect = number.getBoundingClientRect();
+  const styles = getComputedStyle(number);
+
+  number.textContent = original;
+  number.classList.toggle('is-enough', hadEnough);
+
+  return {
+    rect,
+    fontSize: styles.fontSize
+  };
+}
+
+function createShards(text) {
   if (!trigger || !number || !layer) return [];
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return [];
 
-  const rect = number.getBoundingClientRect();
+  const metrics = getTextMetrics(text);
+  const rect = metrics.rect;
   if (!rect.width || !rect.height) return [];
 
-  const styles = getComputedStyle(number);
   const cols = Math.max(7, Math.round(Math.sqrt(shardCountFor(rect.width, rect.height) * 1.7)));
   const rows = Math.max(4, Math.round(cols * rect.height / rect.width * 1.35));
   const cellW = rect.width / cols;
   const cellH = rect.height / rows;
   const shards = [];
 
-  // Slightly irregular rectangular fragments: stable, fast, and works on iOS Safari.
   for (let row = 0; row < rows; row += 1) {
     for (let col = 0; col < cols; col += 1) {
       if (Math.random() < 0.13) continue;
@@ -92,7 +110,6 @@ function createShards() {
       shard.style.width = `${w}px`;
       shard.style.height = `${h}px`;
 
-      // Make the fragment edges less grid-like.
       const a = 4 + Math.random() * 18;
       const b = 82 + Math.random() * 14;
       const c = 82 + Math.random() * 14;
@@ -101,16 +118,16 @@ function createShards() {
 
       const inner = document.createElement('span');
       inner.className = 'shard-inner';
-      inner.textContent = '404';
+      inner.textContent = text;
       inner.style.left = `${-x0}px`;
       inner.style.top = `${-y0}px`;
       inner.style.width = `${rect.width}px`;
       inner.style.height = `${rect.height}px`;
-      inner.style.fontSize = styles.fontSize;
+      inner.style.fontSize = metrics.fontSize;
 
       shard.appendChild(inner);
       layer.appendChild(shard);
-      shards.push({ shard, x0, y0, w, h, rect });
+      shards.push({ shard, rect });
     }
   }
 
@@ -134,13 +151,12 @@ function getExplosionVector(shardRect, numberRect) {
   dx /= length;
   dy /= length;
 
-  // Push every shard comfortably beyond the nearest viewport edge.
   const viewportRadius = Math.hypot(window.innerWidth, window.innerHeight);
-  const force = viewportRadius * (.72 + Math.random() * .42);
+  const force = viewportRadius * (.66 + Math.random() * .34);
 
   return {
-    x: dx * force + (Math.random() - .5) * 260,
-    y: dy * force + (Math.random() - .5) * 220
+    x: dx * force + (Math.random() - .5) * 220,
+    y: dy * force + (Math.random() - .5) * 180
   };
 }
 
@@ -151,10 +167,10 @@ async function shatter404() {
     number.animate(
       [
         { transform: 'scale(1)' },
-        { transform: 'scale(.96)' },
+        { transform: 'scale(.97)' },
         { transform: 'scale(1)' }
       ],
-      { duration: 260, easing: 'ease-out' }
+      { duration: 280, easing: 'ease-out' }
     );
     return;
   }
@@ -164,26 +180,33 @@ async function shatter404() {
 
   const shouldSwitchToEnough = !alternateMode && clickCount >= 5;
   const shouldReturnTo404 = alternateMode;
+  const targetText = shouldSwitchToEnough ? 'ENOUGH.' : '404';
 
-  trigger.classList.add('is-shattering');
+  // Outgoing shards use the current text.
+  const outgoingText = number.textContent;
+  const outgoingShards = createShards(outgoingText);
+  const outgoingRect = number.getBoundingClientRect();
 
-  const shards = createShards();
-
-  if (!shards.length) {
-    trigger.classList.remove('is-shattering');
+  if (!outgoingShards.length) {
     running = false;
     return;
   }
 
-  const numberRect = number.getBoundingClientRect();
+  trigger.classList.add('is-shattering');
 
-  const animations = shards.map(({ shard }) => {
+  const flightData = outgoingShards.map(({ shard }) => {
     const shardRect = shard.getBoundingClientRect();
-    const vector = getExplosionVector(shardRect, numberRect);
-    const rotation = (Math.random() - .5) * 420;
-    const scale = .58 + Math.random() * .52;
+    return {
+      shard,
+      vector: getExplosionVector(shardRect, outgoingRect),
+      rotation: (Math.random() - .5) * 360,
+      scale: .62 + Math.random() * .42
+    };
+  });
 
-    return shard.animate(
+  // Slower launch: nearly one second before reaching the edge.
+  const outgoingAnimations = flightData.map(({ shard, vector, rotation, scale }) =>
+    shard.animate(
       [
         {
           transform: 'translate3d(0, 0, 0) rotate(0deg) scale(1)',
@@ -191,24 +214,76 @@ async function shatter404() {
           offset: 0
         },
         {
-          transform: `translate3d(${vector.x * .46}px, ${vector.y * .46}px, 0) rotate(${rotation * .45}deg) scale(${scale})`,
+          transform: `translate3d(${vector.x * .14}px, ${vector.y * .14}px, 0) rotate(${rotation * .10}deg) scale(.98)`,
           opacity: 1,
-          offset: .19
+          offset: .20
         },
         {
-          transform: `translate3d(${vector.x}px, ${vector.y}px, 0) rotate(${rotation}deg) scale(${scale * .88})`,
-          opacity: .92,
-          offset: .34
-        },
-        {
-          transform: `translate3d(${vector.x}px, ${vector.y}px, 0) rotate(${rotation}deg) scale(${scale * .88})`,
-          opacity: .86,
-          offset: .54
-        },
-        {
-          transform: `translate3d(${vector.x * .34}px, ${vector.y * .34}px, 0) rotate(${rotation * .27}deg) scale(.92)`,
+          transform: `translate3d(${vector.x * .46}px, ${vector.y * .46}px, 0) rotate(${rotation * .42}deg) scale(${scale})`,
           opacity: 1,
-          offset: .83
+          offset: .52
+        },
+        {
+          transform: `translate3d(${vector.x}px, ${vector.y}px, 0) rotate(${rotation}deg) scale(${scale * .9})`,
+          opacity: .9,
+          offset: 1
+        }
+      ],
+      {
+        duration: 1080 + Math.random() * 180,
+        easing: 'cubic-bezier(.24,.62,.28,1)',
+        fill: 'forwards'
+      }
+    )
+  );
+
+  await Promise.allSettled(outgoingAnimations.map((animation) => animation.finished));
+
+  // Keep the screen empty for a beat.
+  await new Promise((resolve) => setTimeout(resolve, 420));
+
+  layer.replaceChildren();
+
+  // Change the hidden DOM text BEFORE creating the returning pieces.
+  number.textContent = targetText;
+  number.classList.toggle('is-enough', targetText === 'ENOUGH.');
+
+  if (shouldSwitchToEnough) {
+    messageTarget.textContent = 'you happy now?';
+    alternateMode = true;
+    clickCount = 0;
+  } else if (shouldReturnTo404) {
+    setRandomMessage();
+    alternateMode = false;
+    clickCount = 0;
+  }
+
+  // Returning shards are already made from the final text, so there is no snap.
+  const returningShards = createShards(targetText);
+  const targetRect = number.getBoundingClientRect();
+
+  const returningAnimations = returningShards.map(({ shard }) => {
+    const shardRect = shard.getBoundingClientRect();
+    const vector = getExplosionVector(shardRect, targetRect);
+    const rotation = (Math.random() - .5) * 320;
+    const scale = .62 + Math.random() * .42;
+
+    return shard.animate(
+      [
+        {
+          transform: `translate3d(${vector.x}px, ${vector.y}px, 0) rotate(${rotation}deg) scale(${scale * .9})`,
+          opacity: .88,
+          offset: 0
+        },
+        {
+          transform: `translate3d(${vector.x * .54}px, ${vector.y * .54}px, 0) rotate(${rotation * .48}deg) scale(${scale})`,
+          opacity: 1,
+          offset: .42
+        },
+        {
+          transform: `translate3d(${vector.x * .16}px, ${vector.y * .16}px, 0) rotate(${rotation * .12}deg) scale(.98)`,
+          opacity: 1,
+          offset: .79
         },
         {
           transform: 'translate3d(0, 0, 0) rotate(0deg) scale(1)',
@@ -217,29 +292,14 @@ async function shatter404() {
         }
       ],
       {
-        duration: 2450 + Math.random() * 350,
-        easing: 'cubic-bezier(.16,.72,.18,1)',
+        duration: 1380 + Math.random() * 220,
+        easing: 'cubic-bezier(.16,.74,.2,1)',
         fill: 'forwards'
       }
     );
   });
 
-  // Swap the hidden text while the fragments are still off-screen.
-  await new Promise((resolve) => setTimeout(resolve, 1350));
-
-  if (shouldSwitchToEnough) {
-    number.textContent = 'ENOUGH.';
-    messageTarget.textContent = 'you happy now?';
-    alternateMode = true;
-    clickCount = 0;
-  } else if (shouldReturnTo404) {
-    number.textContent = '404';
-    setRandomMessage();
-    alternateMode = false;
-    clickCount = 0;
-  }
-
-  await Promise.allSettled(animations.map((animation) => animation.finished));
+  await Promise.allSettled(returningAnimations.map((animation) => animation.finished));
 
   layer.replaceChildren();
   trigger.classList.remove('is-shattering');
