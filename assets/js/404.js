@@ -250,11 +250,9 @@ async function shatter404() {
   number.classList.toggle('is-enough', targetText === 'ENOUGH.');
 
   if (shouldSwitchToEnough) {
-    messageTarget.textContent = 'you happy now?';
     alternateMode = true;
     clickCount = 0;
   } else if (shouldReturnTo404) {
-    setRandomMessage();
     alternateMode = false;
     clickCount = 0;
   }
@@ -302,17 +300,23 @@ async function shatter404() {
 
   await Promise.allSettled(returningAnimations.map((animation) => animation.finished));
 
-  // At this point the shards are at exactly the same geometry as the real text.
-  // Reveal the original first, then remove the shard layer on the next frame.
+  // Keep the completed shard mosaic on-screen while the real text is revealed
+  // with transitions disabled. Update the message at this exact handoff.
+  trigger.classList.add('is-handoff');
   trigger.classList.remove('is-shattering');
 
-  await new Promise((resolve) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(resolve);
-    });
-  });
+  if (shouldSwitchToEnough) {
+    messageTarget.textContent = 'you happy now?';
+  } else if (shouldReturnTo404) {
+    setRandomMessage();
+  }
 
+  await new Promise((resolve) => requestAnimationFrame(resolve));
   layer.replaceChildren();
+
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+  trigger.classList.remove('is-handoff');
+
   running = false;
 }
 

@@ -364,7 +364,7 @@ button:focus-visible {
 
 .shatter-trigger .headline {
   display: block;
-  transition: opacity .08s linear, transform .18s ease;
+  transition: transform .18s ease;
   transform-origin: 50% 50%;
 }
 
@@ -542,12 +542,10 @@ button:focus-visible {
   A tiny optical correction keeps the visible glyphs centered without changing
   the geometry used by the shard reconstruction.
 */
-#error-number:not(.is-enough) {
-  transform: translateX(-0.7%);
-}
+
 
 #error-number.is-enough {
-  transform: translateX(0);
+  
 }
 
 /* The shard rectangle is measured after the real text's optical correction,
@@ -566,4 +564,24 @@ button:focus-visible {
 .shard-inner[data-text="404"],
 .shard-inner[data-text="ENOUGH."] {
   transform: none;
+}
+
+
+/* v27: shared center and flicker-free final handoff */
+.shatter-trigger {
+  transform: translateX(-0.15%);
+}
+
+.shatter-trigger .headline {
+  transform: none;
+}
+
+.shatter-trigger.is-handoff .headline {
+  transition: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.shard-inner {
+  transform: none !important;
 }
