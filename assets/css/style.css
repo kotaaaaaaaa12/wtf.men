@@ -195,9 +195,11 @@ nav {
   animation: scroll-cue-float 1.55s ease-in-out infinite;
 }
 
-.scroll-cue:hover .scroll-cue-icon {
-  background: var(--yellow);
-  border-color: var(--yellow-dark);
+.scroll-cue:hover .scroll-cue-icon,
+.scroll-cue:active .scroll-cue-icon,
+.scroll-cue:focus-visible .scroll-cue-icon {
+  background: var(--cream);
+  border-color: var(--line);
 }
 
 @keyframes scroll-cue-float {
@@ -962,5 +964,51 @@ button:focus-visible {
   .social-copy:active,
   .socials-close:active {
     transform: scale(.98);
+  }
+}
+
+
+/* v30: scroll cue stays visually neutral when tapped */
+.scroll-cue,
+.scroll-cue-icon {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .scroll-cue:hover .scroll-cue-icon,
+  .scroll-cue:active .scroll-cue-icon,
+  .scroll-cue:focus .scroll-cue-icon {
+    background: var(--cream);
+    border-color: var(--line);
+  }
+}
+
+
+/* v31: neutralize Safari's blue dialog focus ring */
+.about-dialog,
+.socials-dialog,
+.about-dialog:focus,
+.socials-dialog:focus,
+.about-dialog:focus-visible,
+.socials-dialog:focus-visible {
+  outline: none !important;
+  -webkit-focus-ring-color: transparent;
+}
+
+/* Keep keyboard focus visible with the site's own neutral style. */
+.about-close:focus-visible,
+.socials-close:focus-visible,
+.social-card:focus-visible,
+.social-copy:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+
+/* v31: BOOTH Downloader follows the normal desktop/tablet project grid */
+@media (min-width: 681px) {
+  .tag.booth-downloader {
+    grid-column: auto;
+    justify-self: start;
   }
 }
