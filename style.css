@@ -340,6 +340,24 @@ nav {
 
 .owner-copy p + p { margin-top: 7px; color: var(--muted); }
 
+
+.owner-copy .ai-credit {
+  max-width: 280px;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: -.01em;
+  font-weight: 550;
+}
+
+.owner-copy .ai-credit span {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .owner-row {
   display: flex;
   align-items: center;
