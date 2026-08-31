@@ -890,47 +890,65 @@
         window.setTimeout(typeNext, 430);
       }
 
-      if (!reducedMotion && window.gsap && window.ScrollTrigger) {
-        gsap.registerPlugin(ScrollTrigger);
-
+      if (!reducedMotion && window.gsap) {
         const projectsCard = document.querySelector('.projects-card');
         const statsCard = document.querySelector('.stats-card');
         const ownerCard = document.querySelector('.owner-card');
         const footer = document.querySelector('.footer');
 
-        function makeScrollTimeline(trigger, start = 'top 88%') {
-          return gsap.timeline({
-            scrollTrigger: {
-              trigger,
-              start,
-              once: true
-            }
-          });
-        }
-
+        // The Projects card can already be visible on small screens at page load.
+        // Keep it staged until the visitor actually starts scrolling, then play the
+        // CodePen-style entrance once. This avoids an animation that finishes before
+        // the user has had a chance to notice it.
         if (projectsCard) {
-          const projectTimeline = makeScrollTimeline(projectsCard);
-          projectTimeline
-            .from(projectsCard, {
-              autoAlpha: 0,
-              y: 30,
-              scale: 0.96,
-              duration: 0.72,
-              ease: 'back.out(1.4)'
-            })
-            .from(projectsCard.querySelectorAll('.tag'), {
-              autoAlpha: 0,
-              y: 16,
-              duration: 0.58,
-              stagger: 0.06,
-              ease: 'power3.out',
-              onComplete() {
-                gsap.set(projectsCard.querySelectorAll('.tag'), { clearProps: 'transform' });
-              }
-            }, '-=0.34');
+          const projectTags = projectsCard.querySelectorAll('.tag');
+          gsap.set(projectsCard, { autoAlpha: 0, y: 30, scale: 0.96 });
+          gsap.set(projectTags, { autoAlpha: 0, y: 16 });
+
+          let projectPlayed = false;
+          const playProjects = () => {
+            if (projectPlayed || window.scrollY <= 3) return;
+            projectPlayed = true;
+            window.removeEventListener('scroll', playProjects);
+
+            gsap.timeline()
+              .to(projectsCard, {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.72,
+                ease: 'back.out(1.4)',
+                clearProps: 'transform'
+              })
+              .to(projectTags, {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.58,
+                stagger: 0.06,
+                ease: 'power3.out',
+                onComplete() {
+                  gsap.set(projectTags, { clearProps: 'transform' });
+                }
+              }, '-=0.34');
+          };
+
+          window.addEventListener('scroll', playProjects, { passive: true });
         }
 
-        if (statsCard) {
+        if (window.ScrollTrigger) {
+          gsap.registerPlugin(ScrollTrigger);
+
+          function makeScrollTimeline(trigger, start = 'top 88%') {
+            return gsap.timeline({
+              scrollTrigger: {
+                trigger,
+                start,
+                once: true
+              }
+            });
+          }
+
+          if (statsCard) {
           const halves = statsCard.querySelectorAll('.stat-half');
           const darkNumber = statsCard.querySelector('.stat-dark .stat-number');
           const lightNumber = statsCard.querySelector('.stat-light .stat-number');
@@ -982,9 +1000,10 @@
             });
         }
 
-        const refreshScrollTriggers = () => ScrollTrigger.refresh();
-        window.addEventListener('load', refreshScrollTriggers, { once: true });
-        if (document.fonts?.ready) document.fonts.ready.then(refreshScrollTriggers).catch(() => {});
+          const refreshScrollTriggers = () => ScrollTrigger.refresh();
+          window.addEventListener('load', refreshScrollTriggers, { once: true });
+          if (document.fonts?.ready) document.fonts.ready.then(refreshScrollTriggers).catch(() => {});
+        }
       }
     })();
   </script>
