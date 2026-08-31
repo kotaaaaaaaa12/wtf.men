@@ -10,6 +10,7 @@
   const title = document.querySelector('#hero-title');
   const homeLink = document.querySelector('#home-link');
   const aboutDialog = document.querySelector('#about-dialog');
+  const socialsDialog = document.querySelector('#socials-dialog');
 
   homeLink?.addEventListener('click', (event) => {
     event.preventDefault();
@@ -62,6 +63,87 @@
   aboutDialog?.addEventListener('cancel', (event) => {
     event.preventDefault();
     closeAboutDialog();
+  });
+
+
+  function openSocialsDialog() {
+    if (!socialsDialog || socialsDialog.open) return;
+
+    socialsDialog.tabIndex = -1;
+    socialsDialog.showModal();
+
+    try {
+      socialsDialog.focus({ preventScroll: true });
+    } catch {
+      socialsDialog.focus();
+    }
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => socialsDialog.classList.add('is-visible'));
+    });
+  }
+
+  function closeSocialsDialog() {
+    if (!socialsDialog?.open) return;
+
+    socialsDialog.classList.remove('is-visible');
+
+    if (reducedMotion) {
+      socialsDialog.close();
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (socialsDialog.open) socialsDialog.close();
+    }, 220);
+  }
+
+  document.querySelectorAll('[data-socials-open]').forEach((button) => {
+    button.addEventListener('click', openSocialsDialog);
+  });
+
+  document.querySelectorAll('[data-socials-close]').forEach((button) => {
+    button.addEventListener('click', closeSocialsDialog);
+  });
+
+  socialsDialog?.addEventListener('click', (event) => {
+    if (event.target === socialsDialog) closeSocialsDialog();
+  });
+
+  socialsDialog?.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeSocialsDialog();
+  });
+
+  document.querySelectorAll('[data-copy-value]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const value = button.getAttribute('data-copy-value') || '';
+      if (!value) return;
+
+      const originalLabel = button.textContent;
+
+      try {
+        await navigator.clipboard.writeText(value);
+      } catch {
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
+
+      button.textContent = 'Copied';
+      button.classList.add('is-copied');
+
+      window.setTimeout(() => {
+        button.textContent = originalLabel;
+        button.classList.remove('is-copied');
+      }, 1300);
+    });
   });
 
   if (title && !reducedMotion) {
