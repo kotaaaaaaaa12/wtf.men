@@ -445,3 +445,29 @@ button:focus-visible {
     display: none;
   }
 }
+
+/* v22: random line now lives directly under the 404 */
+.shatter-hint {
+  max-width: min(760px, 92vw);
+  color: var(--ink);
+  font-size: clamp(18px, 2.1vw, 25px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+  text-transform: none;
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shatter-trigger:hover .shatter-hint {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .shatter-hint {
+    max-width: 320px;
+    font-size: 17px;
+    line-height: 1.3;
+  }
+}

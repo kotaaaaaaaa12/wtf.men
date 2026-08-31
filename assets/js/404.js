@@ -1,4 +1,3 @@
-\
 const requestedTarget = document.querySelector('#requested-url');
 const messageTarget = document.querySelector('#random-message');
 const trigger = document.querySelector('#shatter-trigger');
@@ -21,15 +20,24 @@ const messages = [
 function setRequestedUrl() {
   if (!requestedTarget) return;
 
-  const host = window.location.host || 'what-the-fuck.men';
-  const path = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  const url = new URL(window.location.href);
+  const host = url.host || 'what-the-fuck.men';
+  const path = `${url.pathname}${url.search}${url.hash}`;
+
   requestedTarget.textContent = `${host}${path || '/'}`;
 }
 
 function setRandomMessage() {
   if (!messageTarget) return;
 
-  const last = sessionStorage.getItem('wtf404-message');
+  let last = null;
+
+  try {
+    last = sessionStorage.getItem('wtf404-message');
+  } catch {
+    // Ignore storage restrictions.
+  }
+
   const choices = messages.filter((message) => message !== last);
   const next = choices[Math.floor(Math.random() * choices.length)] || messages[0];
 
