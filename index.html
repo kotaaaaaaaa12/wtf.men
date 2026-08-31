@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/style.css?v=13">
+  <link rel="stylesheet" href="./assets/css/style.css?v=14">
 </head>
 <body>
   <div class="top-bar" aria-hidden="true"></div>
@@ -104,6 +104,16 @@
     <div class="about-panel">
       <div class="about-top">
         <span class="about-kicker">ABOUT</span>
+        <button class="about-close" type="button" data-about-close aria-label="Close about dialog">×</button>
+      </div>
+
+      <h2 id="about-title">what-the-fuck.men</h2>
+      <p class="about-lead">A tiny personal corner of the internet for useful tools, experiments, and ideas that made it far enough to ship.</p>
+
+      <div class="about-facts" aria-label="Site details">
+        <div><span>built with</span><strong>HTML / CSS / JS</strong></div>
+        <div><span>framework</span><strong>none</strong></div>
+        <div><span>hosted on</span><strong>Cloudflare Pages</strong></div>
       </div>
     </div>
   </dialog>
@@ -168,6 +178,6 @@
   </dialog>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="./assets/js/app.js?v=11"></script>
+  <script src="./assets/js/app.js?v=12"></script>
 </body>
 </html>
