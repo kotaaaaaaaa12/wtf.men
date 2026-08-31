@@ -182,6 +182,13 @@
       }
 
       if (ownerCard) {
+        const githubLogo = ownerCard.querySelector('.owner-avatar img');
+        ownerCard.classList.remove('github-spin-active');
+        if (githubLogo) {
+          githubLogo.style.animation = 'none';
+          githubLogo.style.transform = 'rotate(0deg)';
+        }
+
         timeline.to(ownerCard, {
           autoAlpha: 1,
           y: 0,
@@ -189,16 +196,17 @@
           duration: 0.56,
           ease: 'back.out(1.3)',
           clearProps: 'transform',
-          onStart() {
-            const githubLogo = ownerCard.querySelector('.owner-avatar img');
+          onComplete() {
+            if (!githubLogo) return;
             ownerCard.classList.remove('github-spin-active');
-            if (githubLogo) {
-              githubLogo.style.animation = 'none';
-              githubLogo.style.transform = 'rotate(0deg)';
-              void githubLogo.offsetWidth;
-              githubLogo.style.animation = '';
-            }
-            ownerCard.classList.add('github-spin-active');
+            githubLogo.style.animation = 'none';
+            githubLogo.style.transform = 'rotate(0deg)';
+            void githubLogo.offsetWidth;
+            githubLogo.style.animation = '';
+            requestAnimationFrame(() => {
+              if (!ownerCard.isConnected) return;
+              ownerCard.classList.add('github-spin-active');
+            });
           }
         }, '-=0.32');
       }
