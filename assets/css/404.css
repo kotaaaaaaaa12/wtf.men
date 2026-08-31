@@ -587,3 +587,29 @@ button:focus-visible {
 .shard-inner {
   transform: none !important;
 }
+
+
+/* v29: desktop centering + no hover growth artifact */
+@media (min-width: 761px) {
+  .shatter-trigger {
+    transform: none !important;
+    width: min(96vw, 980px);
+    margin-inline: auto;
+  }
+
+  .shatter-trigger .headline {
+    transform: none !important;
+  }
+
+  /* Prevent the right arm of the last 4 from "growing" on initial desktop hover. */
+  .shatter-trigger:hover .headline {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Keep the optical correction that matched the phone screenshot. */
+  .shatter-trigger {
+    transform: translateX(-2%) !important;
+  }
+}
