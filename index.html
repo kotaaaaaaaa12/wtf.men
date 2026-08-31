@@ -11,7 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
     :root {
       --bg: #ebe9e1;
@@ -892,119 +891,117 @@
 
       if (!reducedMotion && window.gsap) {
         const projectsCard = document.querySelector('.projects-card');
+        const projectTags = projectsCard?.querySelectorAll('.tag') ?? [];
         const statsCard = document.querySelector('.stats-card');
+        const statHalves = statsCard?.querySelectorAll('.stat-half') ?? [];
+        const darkNumber = statsCard?.querySelector('.stat-dark .stat-number');
+        const lightNumber = statsCard?.querySelector('.stat-light .stat-number');
         const ownerCard = document.querySelector('.owner-card');
         const footer = document.querySelector('.footer');
 
-        // The Projects card can already be visible on small screens at page load.
-        // Keep it staged until the visitor actually starts scrolling, then play the
-        // CodePen-style entrance once. This avoids an animation that finishes before
-        // the user has had a chance to notice it.
-        if (projectsCard) {
-          const projectTags = projectsCard.querySelectorAll('.tag');
-          gsap.set(projectsCard, { autoAlpha: 0, y: 30, scale: 0.96 });
-          gsap.set(projectTags, { autoAlpha: 0, y: 16 });
+        // Stage the whole card area only when GSAP is available. The first real
+        // scroll intent starts one CodePen-style sequence for desktop and mobile.
+        if (projectsCard) gsap.set(projectsCard, { autoAlpha: 0, y: 34, scale: 0.965 });
+        if (projectTags.length) gsap.set(projectTags, { autoAlpha: 0, y: 16 });
+        if (statHalves.length) gsap.set(statHalves, { autoAlpha: 0, y: 30, scale: 0.97 });
+        if (ownerCard) gsap.set(ownerCard, { autoAlpha: 0, y: 30, scale: 0.97 });
+        if (footer) gsap.set(footer, { autoAlpha: 0, y: 14 });
+        if (darkNumber) darkNumber.textContent = '0';
+        if (lightNumber) lightNumber.textContent = '0%';
 
-          let projectPlayed = false;
-          const playProjects = () => {
-            if (projectPlayed || window.scrollY <= 3) return;
-            projectPlayed = true;
-            window.removeEventListener('scroll', playProjects);
+        let cardIntroPlayed = false;
 
-            gsap.timeline()
-              .to(projectsCard, {
-                autoAlpha: 1,
-                y: 0,
-                scale: 1,
-                duration: 0.72,
-                ease: 'back.out(1.4)',
-                clearProps: 'transform'
-              })
-              .to(projectTags, {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.58,
-                stagger: 0.06,
-                ease: 'power3.out',
-                onComplete() {
-                  gsap.set(projectTags, { clearProps: 'transform' });
-                }
-              }, '-=0.34');
-          };
+        const playCardIntro = () => {
+          if (cardIntroPlayed) return;
+          cardIntroPlayed = true;
 
-          window.addEventListener('scroll', playProjects, { passive: true });
-        }
+          window.removeEventListener('scroll', playCardIntro);
+          window.removeEventListener('wheel', playCardIntro);
+          window.removeEventListener('touchmove', playCardIntro);
+          window.removeEventListener('keydown', handleScrollKey);
 
-        if (window.ScrollTrigger) {
-          gsap.registerPlugin(ScrollTrigger);
+          const counter = { one: 0, percent: 0 };
+          const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-          function makeScrollTimeline(trigger, start = 'top 88%') {
-            return gsap.timeline({
-              scrollTrigger: {
-                trigger,
-                start,
-                once: true
-              }
+          if (projectsCard) {
+            timeline.to(projectsCard, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.72,
+              ease: 'back.out(1.35)',
+              clearProps: 'transform'
             });
           }
 
-          if (statsCard) {
-          const halves = statsCard.querySelectorAll('.stat-half');
-          const darkNumber = statsCard.querySelector('.stat-dark .stat-number');
-          const lightNumber = statsCard.querySelector('.stat-light .stat-number');
+          if (projectTags.length) {
+            timeline.to(projectTags, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.52,
+              stagger: 0.06,
+              onComplete() {
+                gsap.set(projectTags, { clearProps: 'transform' });
+              }
+            }, '-=0.34');
+          }
 
-          const statsTimeline = makeScrollTimeline(statsCard);
-          statsTimeline
-            .from(halves, {
-              autoAlpha: 0,
-              y: 30,
-              scale: 0.96,
-              duration: 0.72,
-              stagger: 0.1,
-              ease: 'back.out(1.4)'
-            })
-            .fromTo({ one: 0, percent: 0 },
-              { one: 0, percent: 0 },
-              {
-                one: 1,
-                percent: 100,
-                duration: 1.05,
-                ease: 'power2.out',
-                onUpdate() {
-                  if (darkNumber) darkNumber.textContent = String(Math.round(this.targets()[0].one));
-                  if (lightNumber) lightNumber.textContent = `${Math.round(this.targets()[0].percent)}%`;
-                }
-              },
-              '-=0.45'
-            );
+          if (statHalves.length) {
+            timeline.to(statHalves, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.68,
+              stagger: 0.11,
+              ease: 'back.out(1.3)',
+              clearProps: 'transform'
+            }, '-=0.12');
+
+            timeline.to(counter, {
+              one: 1,
+              percent: 100,
+              duration: 0.95,
+              ease: 'power2.out',
+              onUpdate() {
+                if (darkNumber) darkNumber.textContent = String(Math.round(counter.one));
+                if (lightNumber) lightNumber.textContent = `${Math.round(counter.percent)}%`;
+              }
+            }, '-=0.48');
+          }
+
+          if (ownerCard) {
+            timeline.to(ownerCard, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.68,
+              ease: 'back.out(1.3)',
+              clearProps: 'transform'
+            }, '-=0.34');
+          }
+
+          if (footer) {
+            timeline.to(footer, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.5,
+              clearProps: 'transform'
+            }, '-=0.25');
+          }
+        };
+
+        function handleScrollKey(event) {
+          if (['ArrowDown', 'PageDown', 'End', ' '].includes(event.key)) playCardIntro();
         }
 
-        if (ownerCard) {
-          makeScrollTimeline(ownerCard)
-            .from(ownerCard, {
-              autoAlpha: 0,
-              y: 30,
-              scale: 0.96,
-              duration: 0.72,
-              ease: 'back.out(1.4)'
-            });
-        }
-
-        if (footer) {
-          makeScrollTimeline(footer, 'top 94%')
-            .from(footer, {
-              autoAlpha: 0,
-              y: 14,
-              duration: 0.58,
-              ease: 'power3.out'
-            });
-        }
-
-          const refreshScrollTriggers = () => ScrollTrigger.refresh();
-          window.addEventListener('load', refreshScrollTriggers, { once: true });
-          if (document.fonts?.ready) document.fonts.ready.then(refreshScrollTriggers).catch(() => {});
-        }
+        // scroll covers normal movement; wheel/touchmove make the first tiny intent
+        // responsive even before the browser has committed a new scroll position.
+        window.addEventListener('scroll', playCardIntro, { passive: true });
+        window.addEventListener('wheel', playCardIntro, { passive: true });
+        window.addEventListener('touchmove', playCardIntro, { passive: true });
+        window.addEventListener('keydown', handleScrollKey);
       }
+
     })();
   </script>
 </body>
