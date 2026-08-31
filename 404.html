@@ -3,65 +3,86 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111111">
+  <meta name="theme-color" content="#ebe9e1">
+  <meta name="color-scheme" content="light">
   <title>404 — what-the-fuck.men</title>
 
-  <link rel="icon" href="/assets/icons/favicon.ico" sizes="any">
-  <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="/assets/css/404.css?v=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/404.css?v=2">
 </head>
 <body>
-  <main class="error-page">
-    <header class="error-top">
-      <a class="brand" href="/" aria-label="Go to what-the-fuck.men home">
-        what-the-fuck.men
-      </a>
-      <span class="status-pill">404 / NOT FOUND</span>
-    </header>
+  <div class="top-bar" aria-hidden="true"></div>
 
-    <section class="error-card" aria-labelledby="error-title">
-      <div class="error-number" aria-hidden="true">404</div>
+  <div class="page">
+    <nav aria-label="404 navigation">
+      <div class="nav-pill">
+        <a class="logo" href="/">wtf.men</a>
+        <a class="nav-link" href="/">Home</a>
+        <span class="nav-current">404</span>
+      </div>
+    </nav>
 
-      <div class="error-copy">
+    <main>
+      <section class="hero">
         <p class="eyebrow">WELL, FUCK.</p>
-        <h1 id="error-title">What the fuck happened here?</h1>
-        <p class="lead">
-          This page doesn’t exist. Maybe it moved. Maybe it never existed.
-          Maybe the URL is just having a bad day.
-        </p>
+        <h1 class="headline">404</h1>
+        <p class="subtitle">What the fuck happened here?</p>
+      </section>
 
-        <div class="error-actions">
-          <a class="home-button" href="/">
-            <span>Go back home</span>
-            <span aria-hidden="true">↗</span>
-          </a>
+      <section class="error-grid">
+        <article class="card message-card">
+          <div class="quote-mark" aria-hidden="true">“</div>
 
-          <button class="back-button" type="button" onclick="history.back()">
-            Go back
-          </button>
-        </div>
-      </div>
+          <div class="message-copy">
+            <h2>This page does not exist.</h2>
+            <p>Maybe it moved. Maybe it never existed. Maybe the URL is just having a bad day.</p>
+          </div>
 
-      <div class="error-note">
-        <span class="note-dot" aria-hidden="true"></span>
-        <span>requested page: <code id="requested-path">/???</code></span>
-      </div>
-    </section>
+          <div class="requested-row">
+            <span class="requested-label">requested page</span>
+            <code id="requested-url">what-the-fuck.men/???</code>
+          </div>
+        </article>
 
-    <footer class="error-footer">
+        <aside class="card action-card">
+          <div>
+            <span class="action-kicker">SO...</span>
+            <h2>Where now?</h2>
+          </div>
+
+          <div class="actions">
+            <a class="action black" href="/">
+              <span>Go home</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+            <button class="action white" type="button" onclick="history.back()">
+              <span>Go back</span>
+              <span aria-hidden="true">←</span>
+            </button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="footer">
       <span>what-the-fuck.men</span>
       <span>still made for fun</span>
     </footer>
-  </main>
+  </div>
 
   <script>
-    const path = window.location.pathname + window.location.search;
-    const target = document.querySelector('#requested-path');
+    const target = document.querySelector('#requested-url');
 
     if (target) {
-      target.textContent = path || '/';
+      const host = window.location.host || 'what-the-fuck.men';
+      const path = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      target.textContent = `${host}${path || '/'}`;
     }
   </script>
 </body>
