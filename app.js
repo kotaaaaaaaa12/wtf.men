@@ -112,6 +112,7 @@
     const darkNumber = statsCard?.querySelector('.stat-dark .stat-number');
     const lightNumber = statsCard?.querySelector('.stat-light .stat-number');
     const ownerCard = document.querySelector('.owner-card');
+    const githubLogo = ownerCard?.querySelector('.owner-avatar img') ?? null;
     const footer = document.querySelector('.footer');
 
     // Stage the whole card area only when GSAP is available. The first real
@@ -125,6 +126,63 @@
     if (footer) gsap.set(footer, { autoAlpha: 0, y: 14 });
     if (darkNumber) darkNumber.textContent = '0';
     if (lightNumber) lightNumber.textContent = '0%';
+
+    let ownerCardIntroComplete = !ownerCard;
+    let githubLogoInView = !githubLogo;
+    let githubSpinStarted = false;
+    let githubObserver = null;
+
+    function resetGithubLogo() {
+      if (!githubLogo || !ownerCard) return;
+      ownerCard.classList.remove('github-spin-active');
+      githubLogo.style.animation = 'none';
+      githubLogo.style.transform = 'rotate(0deg)';
+      void githubLogo.offsetWidth;
+      githubLogo.style.animation = '';
+    }
+
+    function startGithubSpinWhenReady() {
+      if (
+        githubSpinStarted ||
+        !githubLogo ||
+        !ownerCard ||
+        !ownerCardIntroComplete ||
+        !githubLogoInView
+      ) {
+        return;
+      }
+
+      githubSpinStarted = true;
+      resetGithubLogo();
+
+      // Start on the next frame so the browser paints the 0-degree state first.
+      requestAnimationFrame(() => {
+        if (!ownerCard.isConnected || !githubLogo.isConnected) return;
+        ownerCard.classList.add('github-spin-active');
+        githubObserver?.disconnect();
+      });
+    }
+
+    if (githubLogo) {
+      resetGithubLogo();
+
+      if ('IntersectionObserver' in window) {
+        githubObserver = new IntersectionObserver((entries) => {
+          const entry = entries[0];
+          githubLogoInView = Boolean(
+            entry?.isIntersecting && entry.intersectionRatio >= 0.5
+          );
+          startGithubSpinWhenReady();
+        }, {
+          threshold: [0, 0.5, 1]
+        });
+
+        githubObserver.observe(githubLogo);
+      } else {
+        // Old browsers fall back to starting after the owner card intro.
+        githubLogoInView = true;
+      }
+    }
 
     let cardIntroPlayed = false;
 
@@ -182,13 +240,6 @@
       }
 
       if (ownerCard) {
-        const githubLogo = ownerCard.querySelector('.owner-avatar img');
-        ownerCard.classList.remove('github-spin-active');
-        if (githubLogo) {
-          githubLogo.style.animation = 'none';
-          githubLogo.style.transform = 'rotate(0deg)';
-        }
-
         timeline.to(ownerCard, {
           autoAlpha: 1,
           y: 0,
@@ -197,16 +248,8 @@
           ease: 'back.out(1.3)',
           clearProps: 'transform',
           onComplete() {
-            if (!githubLogo) return;
-            ownerCard.classList.remove('github-spin-active');
-            githubLogo.style.animation = 'none';
-            githubLogo.style.transform = 'rotate(0deg)';
-            void githubLogo.offsetWidth;
-            githubLogo.style.animation = '';
-            requestAnimationFrame(() => {
-              if (!ownerCard.isConnected) return;
-              ownerCard.classList.add('github-spin-active');
-            });
+            ownerCardIntroComplete = true;
+            startGithubSpinWhenReady();
           }
         }, '-=0.32');
       }
