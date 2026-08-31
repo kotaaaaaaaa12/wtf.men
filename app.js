@@ -130,15 +130,18 @@
     let ownerCardIntroComplete = !ownerCard;
     let githubLogoInView = !githubLogo;
     let githubSpinStarted = false;
+    let githubSpinAnimation = null;
     let githubObserver = null;
 
-    function resetGithubLogo() {
+    function stopGithubSpin() {
+      githubSpinAnimation?.cancel();
+      githubSpinAnimation = null;
+      githubSpinStarted = false;
+
       if (!githubLogo || !ownerCard) return;
       ownerCard.classList.remove('github-spin-active');
       githubLogo.style.animation = 'none';
       githubLogo.style.transform = 'rotate(0deg)';
-      void githubLogo.offsetWidth;
-      githubLogo.style.animation = '';
     }
 
     function startGithubSpinWhenReady() {
@@ -153,18 +156,26 @@
       }
 
       githubSpinStarted = true;
-      resetGithubLogo();
 
-      // Start on the next frame so the browser paints the 0-degree state first.
-      requestAnimationFrame(() => {
-        if (!ownerCard.isConnected || !githubLogo.isConnected) return;
-        ownerCard.classList.add('github-spin-active');
-        githubObserver?.disconnect();
-      });
+      // Use the Web Animations API instead of a CSS class animation.
+      // This guarantees there is no hidden pre-roll and no visible snap back
+      // to 0deg before the spin begins.
+      githubSpinAnimation = githubLogo.animate(
+        [
+          { transform: 'rotate(0deg)' },
+          { transform: 'rotate(360deg)' }
+        ],
+        {
+          duration: 20000,
+          iterations: Infinity,
+          easing: 'linear'
+        }
+      );
     }
 
     if (githubLogo) {
-      resetGithubLogo();
+      // Keep the logo frozen at exactly 0deg until it is actually visible.
+      stopGithubSpin();
 
       if ('IntersectionObserver' in window) {
         githubObserver = new IntersectionObserver((entries) => {
@@ -182,6 +193,20 @@
         // Old browsers fall back to starting after the owner card intro.
         githubLogoInView = true;
       }
+
+      // Prevent a spinning state from being frozen into the back-forward cache.
+      window.addEventListener('pagehide', stopGithubSpin);
+      window.addEventListener('pageshow', (event) => {
+        if (!event.persisted) return;
+        stopGithubSpin();
+
+        requestAnimationFrame(() => {
+          const rect = githubLogo.getBoundingClientRect();
+          const visibleHeight = Math.min(rect.bottom, innerHeight) - Math.max(rect.top, 0);
+          githubLogoInView = rect.height > 0 && visibleHeight >= rect.height * 0.5;
+          startGithubSpinWhenReady();
+        });
+      });
     }
 
     let cardIntroPlayed = false;

@@ -359,15 +359,6 @@ nav {
   animation: none;
 }
 
-.owner-card.github-spin-active .owner-avatar img {
-  animation: github-logo-spin 20s linear infinite;
-}
-
-@keyframes github-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 .owner-id strong {
   display: block;
   overflow: hidden;
