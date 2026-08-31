@@ -99,7 +99,24 @@
   }
 
   document.querySelectorAll('[data-socials-open]').forEach((button) => {
-    button.addEventListener('click', openSocialsDialog);
+    let openedFromPointer = false;
+
+    button.addEventListener('pointerup', (event) => {
+      if (event.pointerType === 'touch' || event.pointerType === 'pen') {
+        openedFromPointer = true;
+        openSocialsDialog();
+      }
+    });
+
+    button.addEventListener('click', (event) => {
+      if (openedFromPointer) {
+        openedFromPointer = false;
+        event.preventDefault();
+        return;
+      }
+
+      openSocialsDialog();
+    });
   });
 
   document.querySelectorAll('[data-socials-close]').forEach((button) => {

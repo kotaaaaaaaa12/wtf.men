@@ -437,11 +437,6 @@ nav {
   transition: transform .16s ease, background .16s ease, border-color .16s ease;
 }
 
-.socials-open:hover {
-  transform: translateY(-2px);
-  background: var(--yellow);
-  border-color: var(--yellow-dark);
-}
 
 .socials-dialog {
   width: min(560px, calc(100% - 28px));
@@ -538,11 +533,6 @@ nav {
   transition: transform .16s ease, border-color .16s ease, background .16s ease;
 }
 
-a.social-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--yellow-dark);
-  background: var(--yellow);
-}
 
 .social-card-icon {
   width: 42px;
@@ -603,10 +593,6 @@ a.social-card:hover {
   font-weight: 700;
 }
 
-.social-copy:hover {
-  background: var(--yellow);
-  border-color: var(--yellow-dark);
-}
 
 .social-copy.is-copied {
   background: var(--yellow);
@@ -876,6 +862,27 @@ button:focus-visible {
 }
 
 /* Intro motion at the top, then viewport-triggered reveals for lower sections. */
+
+@media (hover: hover) and (pointer: fine) {
+  .socials-open:hover {
+    transform: translateY(-2px);
+    background: var(--yellow);
+    border-color: var(--yellow-dark);
+  }
+
+  a.social-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--yellow-dark);
+    background: var(--yellow);
+  }
+
+  .social-copy:hover {
+    background: var(--yellow);
+    border-color: var(--yellow-dark);
+  }
+
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .top-bar {
     transform-origin: left center;
@@ -938,4 +945,22 @@ button:focus-visible {
   .socials-dialog::backdrop { transition: none; }
   .owner-avatar img,
   .scroll-cue-icon { animation: none !important; }
+}
+
+
+.socials-open,
+.social-card,
+.social-copy,
+.socials-close {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .socials-open:active,
+  a.social-card:active,
+  .social-copy:active,
+  .socials-close:active {
+    transform: scale(.98);
+  }
 }
