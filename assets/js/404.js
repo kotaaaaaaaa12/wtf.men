@@ -70,7 +70,11 @@ function getTextMetrics(text) {
 
   return {
     rect,
-    fontSize: styles.fontSize
+    fontSize: styles.fontSize,
+    letterSpacing: styles.letterSpacing,
+    lineHeight: styles.lineHeight,
+    fontWeight: styles.fontWeight,
+    fontFamily: styles.fontFamily
   };
 }
 
@@ -117,6 +121,10 @@ function createShards(text) {
       inner.style.width = `${rect.width}px`;
       inner.style.height = `${rect.height}px`;
       inner.style.fontSize = metrics.fontSize;
+      inner.style.letterSpacing = metrics.letterSpacing;
+      inner.style.lineHeight = metrics.lineHeight;
+      inner.style.fontWeight = metrics.fontWeight;
+      inner.style.fontFamily = metrics.fontFamily;
 
       shard.appendChild(inner);
       layer.appendChild(shard);

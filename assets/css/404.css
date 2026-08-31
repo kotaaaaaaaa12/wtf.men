@@ -550,7 +550,20 @@ button:focus-visible {
   transform: translateX(0);
 }
 
-/* The shard clone must receive the same optical correction as the real 404. */
+/* The shard rectangle is measured after the real text's optical correction,
+   so the clone must not apply that correction a second time. */
 .shard-inner[data-text="404"] {
-  transform: translateX(-0.7%);
+  transform: none;
+}
+
+
+/* v26: exact final-frame typography matching */
+.shard-inner {
+  text-rendering: inherit;
+  font-synthesis: none;
+}
+
+.shard-inner[data-text="404"],
+.shard-inner[data-text="ENOUGH."] {
+  transform: none;
 }
