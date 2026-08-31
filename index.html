@@ -129,6 +129,8 @@
 
     .nav-cta:hover { transform: translateY(-1px); }
 
+    .nav-cta-short { display: none; }
+
     .hero {
       padding: 28px 12px 54px;
       text-align: center;
@@ -346,49 +348,22 @@
     }
 
     .owner-avatar {
-      position: relative;
       width: 39px;
       height: 39px;
       flex: none;
       display: grid;
       place-items: center;
-      border-radius: 50%;
-      background: #fff;
-      isolation: isolate;
-    }
-
-    .owner-avatar::before {
-      content: "";
-      position: absolute;
-      inset: -4px;
-      z-index: -1;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 0deg,
-        var(--yellow) 0 18%,
-        transparent 18% 52%,
-        var(--yellow) 52% 70%,
-        transparent 70% 100%
-      );
-      animation: github-ring-spin 20s linear infinite;
-    }
-
-    .owner-avatar::after {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      z-index: -1;
-      border-radius: 50%;
-      background: var(--cream);
     }
 
     .owner-avatar img {
-      width: 28px;
-      height: 28px;
+      width: 31px;
+      height: 31px;
       display: block;
+      transform-origin: 50% 50%;
+      animation: github-logo-spin 20s linear infinite;
     }
 
-    @keyframes github-ring-spin {
+    @keyframes github-logo-spin {
       to { transform: rotate(360deg); }
     }
 
@@ -603,10 +578,33 @@
       .top-bar { height: 10px; }
       .page { width: min(100% - 20px, 1320px); padding-top: 18px; }
       nav { top: 10px; margin-bottom: 42px; }
-      .nav-pill { width: 100%; justify-content: space-between; }
-      .nav-link { display: none; }
-      .logo { padding-inline: 14px; font-size: 14px; }
-      .nav-cta { margin-left: auto; padding-inline: 15px; }
+      .nav-pill {
+        width: 100%;
+        justify-content: space-between;
+        gap: 1px;
+        padding: 5px;
+      }
+      .logo,
+      .nav-link,
+      .nav-cta {
+        min-height: 36px;
+      }
+      .logo {
+        padding-inline: 10px;
+        font-size: 13px;
+      }
+      .nav-link {
+        display: inline-flex;
+        padding-inline: 9px;
+        font-size: 12px;
+      }
+      .nav-cta {
+        margin-left: 1px;
+        padding-inline: 12px;
+        font-size: 12px;
+      }
+      .nav-cta-full { display: none; }
+      .nav-cta-short { display: inline; }
       .hero { padding: 22px 6px 44px; }
       .headline { font-size: clamp(56px, 17vw, 86px); margin-bottom: 25px; }
       .subtitle { font-size: 15px; }
@@ -624,6 +622,12 @@
       .about-panel { padding: 20px; }
       .about-dialog h2 { margin-top: 26px; }
       .about-facts { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 390px) {
+      .logo { padding-inline: 8px; font-size: 12px; }
+      .nav-link { padding-inline: 7px; font-size: 11px; }
+      .nav-cta { padding-inline: 10px; font-size: 11px; }
     }
 
     /* Intro motion inspired by the reference Pen: bar → nav → copy → cards → tags. */
@@ -712,11 +716,7 @@
       .owner-link,
       .about-dialog,
       .about-dialog::backdrop { transition: none; }
-    
-      .owner-avatar::before { animation: none !important; }
-    }
-      @media (prefers-reduced-motion: reduce) {
-      .owner-avatar { animation: none; }
+      .owner-avatar img { animation: none !important; }
     }
   </style>
 </head>
@@ -729,7 +729,6 @@
         <a class="logo" href="#top" id="home-link">wtf.men</a>
         <a class="nav-link" href="#projects">Projects</a>
         <button class="nav-link" type="button" data-about-open>About</button>
-        <a class="nav-cta" href="https://wishlist.what-the-fuck.men/">Open Wishlist</a>
       </div>
     </nav>
 
