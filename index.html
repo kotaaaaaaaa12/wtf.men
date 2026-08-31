@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
     :root {
       --bg: #ebe9e1;
@@ -631,7 +633,7 @@
       .nav-cta { padding-inline: 10px; font-size: 11px; }
     }
 
-    /* Intro motion inspired by the reference Pen: bar → nav → copy → cards → tags. */
+    /* Intro motion at the top, then viewport-triggered reveals for lower sections. */
     @media (prefers-reduced-motion: no-preference) {
       .top-bar {
         transform-origin: left center;
@@ -652,25 +654,8 @@
           cta-breathe 1.7s 2.2s ease-in-out infinite alternate;
       }
 
-      .projects-card {
-        animation: card-in .72s 1.28s cubic-bezier(.2, 1.22, .35, 1) both;
-      }
-
-      .stats-card .stat-half:first-child {
-        animation: card-in .72s 1.38s cubic-bezier(.2, 1.22, .35, 1) both;
-      }
-
-      .stats-card .stat-half:last-child {
-        animation: card-in .72s 1.48s cubic-bezier(.2, 1.22, .35, 1) both;
-      }
-
-      .owner-card {
-        animation: card-in .72s 1.58s cubic-bezier(.2, 1.22, .35, 1) both;
-      }
-
-      .tag { opacity: 0; scale: .35; animation: tag-pop .62s cubic-bezier(.2, 1.65, .35, 1) forwards; }
-      .tag:nth-child(1) { animation-delay: 1.64s; }
     }
+
 
     @keyframes top-bar-in {
       from { opacity: 0; transform: scaleX(0); }
@@ -695,16 +680,6 @@
     @keyframes cta-breathe {
       from { scale: 1; }
       to { scale: 1.025; }
-    }
-
-    @keyframes card-in {
-      from { opacity: 0; transform: translateY(30px) scale(.96); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @keyframes tag-pop {
-      from { opacity: 0; scale: .35; }
-      to { opacity: 1; scale: 1; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -915,30 +890,98 @@
         window.setTimeout(typeNext, 430);
       }
 
-      if (!reducedMotion) {
-        const counters = [
-          { el: document.querySelector('.stat-dark .stat-number'), end: 1, suffix: '' },
-          { el: document.querySelector('.stat-light .stat-number'), end: 100, suffix: '%' }
-        ];
+      if (!reducedMotion && window.gsap && window.ScrollTrigger) {
+        gsap.registerPlugin(ScrollTrigger);
 
-        counters.forEach(({ el, suffix }) => {
-          if (el) el.textContent = `0${suffix}`;
-        });
+        const projectsCard = document.querySelector('.projects-card');
+        const statsCard = document.querySelector('.stats-card');
+        const ownerCard = document.querySelector('.owner-card');
+        const footer = document.querySelector('.footer');
 
-        window.setTimeout(() => {
-          counters.forEach(({ el, end, suffix }) => {
-            if (!el) return;
-            const started = performance.now();
-            const duration = 1050;
-            const tick = (now) => {
-              const p = Math.min(1, (now - started) / duration);
-              const eased = 1 - Math.pow(1 - p, 3);
-              el.textContent = `${Math.round(end * eased)}${suffix}`;
-              if (p < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
+        function makeScrollTimeline(trigger, start = 'top 88%') {
+          return gsap.timeline({
+            scrollTrigger: {
+              trigger,
+              start,
+              once: true
+            }
           });
-        }, 1500);
+        }
+
+        if (projectsCard) {
+          const projectTimeline = makeScrollTimeline(projectsCard);
+          projectTimeline
+            .from(projectsCard, {
+              autoAlpha: 0,
+              y: 30,
+              scale: 0.96,
+              duration: 0.72,
+              ease: 'back.out(1.4)'
+            })
+            .from(projectsCard.querySelectorAll('.tag'), {
+              autoAlpha: 0,
+              scale: 0.3,
+              duration: 0.62,
+              stagger: 0.06,
+              ease: 'back.out(2)'
+            }, '-=0.42');
+        }
+
+        if (statsCard) {
+          const halves = statsCard.querySelectorAll('.stat-half');
+          const darkNumber = statsCard.querySelector('.stat-dark .stat-number');
+          const lightNumber = statsCard.querySelector('.stat-light .stat-number');
+
+          const statsTimeline = makeScrollTimeline(statsCard);
+          statsTimeline
+            .from(halves, {
+              autoAlpha: 0,
+              y: 30,
+              scale: 0.96,
+              duration: 0.72,
+              stagger: 0.1,
+              ease: 'back.out(1.4)'
+            })
+            .fromTo({ one: 0, percent: 0 },
+              { one: 0, percent: 0 },
+              {
+                one: 1,
+                percent: 100,
+                duration: 1.05,
+                ease: 'power2.out',
+                onUpdate() {
+                  if (darkNumber) darkNumber.textContent = String(Math.round(this.targets()[0].one));
+                  if (lightNumber) lightNumber.textContent = `${Math.round(this.targets()[0].percent)}%`;
+                }
+              },
+              '-=0.45'
+            );
+        }
+
+        if (ownerCard) {
+          makeScrollTimeline(ownerCard)
+            .from(ownerCard, {
+              autoAlpha: 0,
+              y: 30,
+              scale: 0.96,
+              duration: 0.72,
+              ease: 'back.out(1.4)'
+            });
+        }
+
+        if (footer) {
+          makeScrollTimeline(footer, 'top 94%')
+            .from(footer, {
+              autoAlpha: 0,
+              y: 14,
+              duration: 0.58,
+              ease: 'power3.out'
+            });
+        }
+
+        const refreshScrollTriggers = () => ScrollTrigger.refresh();
+        window.addEventListener('load', refreshScrollTriggers, { once: true });
+        if (document.fonts?.ready) document.fonts.ready.then(refreshScrollTriggers).catch(() => {});
       }
     })();
   </script>
