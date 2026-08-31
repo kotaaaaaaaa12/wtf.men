@@ -309,29 +309,20 @@
     }
 
     let cardIntroPlayed = false;
+    const mobileCardsMode = window.matchMedia('(max-width: 680px)').matches;
 
-    const playCardIntro = () => {
-      if (cardIntroPlayed) return;
-      cardIntroPlayed = true;
+    const animateProjectsCard = () => {
+      if (!projectsCard) return;
 
-      window.removeEventListener('scroll', playCardIntro);
-      window.removeEventListener('wheel', playCardIntro);
-      window.removeEventListener('touchmove', playCardIntro);
-      window.removeEventListener('keydown', handleScrollKey);
-
-      const counter = { projects: 0, percent: 0 };
       const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-      if (projectsCard) {
-        timeline.to(projectsCard, {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.60,
-          ease: 'back.out(1.35)',
-          clearProps: 'transform'
-        });
-      }
+      timeline.to(projectsCard, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.60,
+        ease: 'back.out(1.35)',
+        clearProps: 'transform'
+      });
 
       if (projectTags.length) {
         timeline.to(projectTags, {
@@ -340,64 +331,182 @@
           stagger: 0.07
         }, '-=0.30');
       }
-
-      if (statsCard) {
-        timeline.to(statsCard, {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.60,
-          ease: 'back.out(1.3)',
-          clearProps: 'transform'
-        }, '-=0.14');
-
-        timeline.to(counter, {
-          projects: 7,
-          percent: 100,
-          duration: 0.78,
-          ease: 'power2.out',
-          onUpdate() {
-            if (darkNumber) darkNumber.textContent = String(Math.round(counter.projects));
-            if (lightNumber) lightNumber.textContent = `${Math.round(counter.percent)}%`;
-          }
-        }, '-=0.42');
-      }
-
-      if (ownerCard) {
-        timeline.to(ownerCard, {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.56,
-          ease: 'back.out(1.3)',
-          clearProps: 'transform',
-          onComplete() {
-            ownerCardIntroComplete = true;
-            startAvatarSpinWhenReady();
-          }
-        }, '-=0.32');
-      }
-
-      if (footer) {
-        timeline.to(footer, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.42,
-          clearProps: 'transform'
-        }, '-=0.24');
-      }
     };
 
-    function handleScrollKey(event) {
-      if (['ArrowDown', 'PageDown', 'End', ' '].includes(event.key)) playCardIntro();
-    }
+    const animateStatsCard = () => {
+      if (!statsCard) return;
 
-    // scroll covers normal movement; wheel/touchmove make the first tiny intent
-    // responsive even before the browser has committed a new scroll position.
-    window.addEventListener('scroll', playCardIntro, { passive: true });
-    window.addEventListener('wheel', playCardIntro, { passive: true });
-    window.addEventListener('touchmove', playCardIntro, { passive: true });
-    window.addEventListener('keydown', handleScrollKey);
+      const counter = { projects: 0, percent: 0 };
+      const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      timeline.to(statsCard, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.60,
+        ease: 'back.out(1.3)',
+        clearProps: 'transform'
+      });
+
+      timeline.to(counter, {
+        projects: 7,
+        percent: 100,
+        duration: 0.78,
+        ease: 'power2.out',
+        onUpdate() {
+          if (darkNumber) darkNumber.textContent = String(Math.round(counter.projects));
+          if (lightNumber) lightNumber.textContent = `${Math.round(counter.percent)}%`;
+        }
+      }, '-=0.42');
+    };
+
+    const animateOwnerCard = () => {
+      if (!ownerCard) return;
+
+      gsap.to(ownerCard, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.56,
+        ease: 'back.out(1.3)',
+        clearProps: 'transform',
+        onComplete() {
+          ownerCardIntroComplete = true;
+          startAvatarSpinWhenReady();
+        }
+      });
+    };
+
+    const animateFooter = () => {
+      if (!footer) return;
+
+      gsap.to(footer, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.42,
+        ease: 'power3.out',
+        clearProps: 'transform'
+      });
+    };
+
+    if (mobileCardsMode && 'IntersectionObserver' in window) {
+      // On phones/tablets, reveal each section only as the user actually
+      // reaches it instead of firing the whole stack on the first scroll.
+      const mobileRevealItems = [
+        [projectsCard, animateProjectsCard],
+        [statsCard, animateStatsCard],
+        [ownerCard, animateOwnerCard],
+        [footer, animateFooter]
+      ].filter(([element]) => Boolean(element));
+
+      const revealed = new WeakSet();
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || entry.intersectionRatio < 0.18) return;
+          if (revealed.has(entry.target)) return;
+
+          revealed.add(entry.target);
+
+          const item = mobileRevealItems.find(([element]) => element === entry.target);
+          item?.[1]();
+          observer.unobserve(entry.target);
+        });
+      }, {
+        threshold: [0, 0.18, 0.35],
+        rootMargin: '0px 0px -8% 0px'
+      });
+
+      mobileRevealItems.forEach(([element]) => revealObserver.observe(element));
+    } else {
+      // Desktop keeps the original single-scroll cinematic sequence.
+      const playCardIntro = () => {
+        if (cardIntroPlayed) return;
+        cardIntroPlayed = true;
+
+        window.removeEventListener('scroll', playCardIntro);
+        window.removeEventListener('wheel', playCardIntro);
+        window.removeEventListener('touchmove', playCardIntro);
+        window.removeEventListener('keydown', handleScrollKey);
+
+        const counter = { projects: 0, percent: 0 };
+        const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        if (projectsCard) {
+          timeline.to(projectsCard, {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.60,
+            ease: 'back.out(1.35)',
+            clearProps: 'transform'
+          });
+        }
+
+        if (projectTags.length) {
+          timeline.to(projectTags, {
+            autoAlpha: 1,
+            duration: 0.42,
+            stagger: 0.07
+          }, '-=0.30');
+        }
+
+        if (statsCard) {
+          timeline.to(statsCard, {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.60,
+            ease: 'back.out(1.3)',
+            clearProps: 'transform'
+          }, '-=0.14');
+
+          timeline.to(counter, {
+            projects: 7,
+            percent: 100,
+            duration: 0.78,
+            ease: 'power2.out',
+            onUpdate() {
+              if (darkNumber) darkNumber.textContent = String(Math.round(counter.projects));
+              if (lightNumber) lightNumber.textContent = `${Math.round(counter.percent)}%`;
+            }
+          }, '-=0.42');
+        }
+
+        if (ownerCard) {
+          timeline.to(ownerCard, {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.56,
+            ease: 'back.out(1.3)',
+            clearProps: 'transform',
+            onComplete() {
+              ownerCardIntroComplete = true;
+              startAvatarSpinWhenReady();
+            }
+          }, '-=0.32');
+        }
+
+        if (footer) {
+          timeline.to(footer, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.42,
+            clearProps: 'transform'
+          }, '-=0.24');
+        }
+      };
+
+      function handleScrollKey(event) {
+        if (['ArrowDown', 'PageDown', 'End', ' '].includes(event.key)) playCardIntro();
+      }
+
+      window.addEventListener('scroll', playCardIntro, { passive: true });
+      window.addEventListener('wheel', playCardIntro, { passive: true });
+      window.addEventListener('touchmove', playCardIntro, { passive: true });
+      window.addEventListener('keydown', handleScrollKey);
+    }
   }
 
 })();
