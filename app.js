@@ -145,7 +145,7 @@
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: 0.72,
+          duration: 0.60,
           ease: 'back.out(1.35)',
           clearProps: 'transform'
         });
@@ -154,9 +154,9 @@
       if (projectTags.length) {
         timeline.to(projectTags, {
           autoAlpha: 1,
-          duration: 0.52,
-          stagger: 0.09
-        }, '-=0.34');
+          duration: 0.42,
+          stagger: 0.07
+        }, '-=0.30');
       }
 
       if (statsCard) {
@@ -164,21 +164,21 @@
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: 0.72,
+          duration: 0.60,
           ease: 'back.out(1.3)',
           clearProps: 'transform'
-        }, '-=0.12');
+        }, '-=0.14');
 
         timeline.to(counter, {
           projects: 2,
           percent: 100,
-          duration: 0.95,
+          duration: 0.78,
           ease: 'power2.out',
           onUpdate() {
             if (darkNumber) darkNumber.textContent = String(Math.round(counter.projects));
             if (lightNumber) lightNumber.textContent = `${Math.round(counter.percent)}%`;
           }
-        }, '-=0.48');
+        }, '-=0.42');
       }
 
       if (ownerCard) {
@@ -186,19 +186,22 @@
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: 0.68,
+          duration: 0.56,
           ease: 'back.out(1.3)',
-          clearProps: 'transform'
-        }, '-=0.34');
+          clearProps: 'transform',
+          onStart() {
+            ownerCard.classList.add('github-spin-active');
+          }
+        }, '-=0.32');
       }
 
       if (footer) {
         timeline.to(footer, {
           autoAlpha: 1,
           y: 0,
-          duration: 0.5,
+          duration: 0.42,
           clearProps: 'transform'
-        }, '-=0.25');
+        }, '-=0.24');
       }
     };
 
