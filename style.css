@@ -204,7 +204,7 @@ nav {
 .card {
   position: relative;
   overflow: hidden;
-  min-height: 390px;
+  min-height: 430px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
@@ -225,7 +225,7 @@ nav {
 
 .tags {
   position: relative;
-  height: 290px;
+  height: 355px;
   margin-top: 8px;
 }
 
@@ -255,10 +255,13 @@ nav {
 .tag.black { background: var(--black); color: #fff; }
 .tag.white { background: var(--cream); color: var(--ink); border: 1px solid rgba(0,0,0,.08); }
 
-.tag.wishlist { --tag-rotation: -4deg; top: 10%; left: 9%; }
-.tag.dakuten { --tag-rotation: 3deg; top: 31%; right: 8%; }
-.tag.emulatorjs { --tag-rotation: 4.5deg; top: 56%; left: 16%; }
-.tag.aamaker { --tag-rotation: -3deg; top: 76%; right: 14%; }
+.tag.wishlist { --tag-rotation: -4deg; top: 6%; left: 7%; }
+.tag.dakuten { --tag-rotation: 3deg; top: 22%; right: 6%; }
+.tag.emulatorjs { --tag-rotation: 4.5deg; top: 38%; left: 14%; }
+.tag.aamaker { --tag-rotation: -3deg; top: 52%; right: 11%; }
+.tag.chaos-texture { --tag-rotation: 2deg; top: 66%; left: 5%; }
+.tag.chaos-maker { --tag-rotation: -4.5deg; top: 79%; right: 5%; }
+.tag.booth-downloader { --tag-rotation: 3.5deg; top: 91%; left: 20%; }
 
 .stats-card {
   display: grid;
@@ -561,12 +564,15 @@ button:focus-visible {
 
 @media (max-width: 980px) {
   .cards-grid { grid-template-columns: 1fr 1fr; }
-  .projects-card { grid-column: 1 / -1; min-height: 350px; }
-  .tags { height: 245px; }
-  .tag.wishlist { left: 13%; }
-  .tag.dakuten { right: 10%; }
-  .tag.emulatorjs { left: 20%; }
-  .tag.aamaker { right: 16%; }
+  .projects-card { grid-column: 1 / -1; min-height: 430px; }
+  .tags { height: 350px; }
+  .tag.wishlist { top: 5%; left: 9%; }
+  .tag.dakuten { top: 20%; right: 7%; }
+  .tag.emulatorjs { top: 36%; left: 18%; }
+  .tag.aamaker { top: 50%; right: 13%; }
+  .tag.chaos-texture { top: 64%; left: 4%; }
+  .tag.chaos-maker { top: 78%; right: 5%; }
+  .tag.booth-downloader { top: 91%; left: 23%; }
 }
 
 @media (max-width: 680px) {
@@ -605,19 +611,31 @@ button:focus-visible {
   .headline { font-size: clamp(56px, 17vw, 86px); margin-bottom: 25px; }
   .subtitle { font-size: 15px; }
   .cards-grid { grid-template-columns: 1fr; }
-  .projects-card,
+  .projects-card { grid-column: auto; min-height: 500px; }
   .stats-card,
   .owner-card { grid-column: auto; min-height: 390px; }
-  .tags { height: 300px; }
-  .tag { min-height: 43px; padding-inline: 15px; font-size: 13px; }
-  .tag.wishlist { top: 8%; left: 4%; }
-  .tag.dakuten { top: 30%; right: 2%; }
-  .tag.emulatorjs { top: 55%; left: 7%; }
-  .tag.aamaker { top: 77%; right: 8%; }
+  .tags { height: 410px; }
+  .tag { min-height: 42px; padding-inline: 14px; font-size: 12px; }
+  .tag.wishlist { top: 4%; left: 2%; }
+  .tag.dakuten { top: 18%; right: 1%; }
+  .tag.emulatorjs { top: 32%; left: 5%; }
+  .tag.aamaker { top: 46%; right: 4%; }
+  .tag.chaos-texture { top: 60%; left: 0%; }
+  .tag.chaos-maker { top: 74%; right: 0%; }
+  .tag.booth-downloader { top: 88%; left: 9%; }
   .footer { flex-direction: column; }
   .about-panel { padding: 20px; }
   .about-dialog h2 { margin-top: 26px; }
   .about-facts { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 430px) {
+  .tag.chaos-texture,
+  .tag.chaos-maker,
+  .tag.booth-downloader {
+    font-size: 11px;
+    padding-inline: 11px;
+  }
 }
 
 @media (max-width: 390px) {

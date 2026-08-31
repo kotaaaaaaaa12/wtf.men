@@ -253,7 +253,7 @@
         }, '-=0.14');
 
         timeline.to(counter, {
-          projects: 4,
+          projects: 7,
           percent: 100,
           duration: 0.78,
           ease: 'power2.out',
