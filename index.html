@@ -814,7 +814,17 @@
 
       function openAboutDialog() {
         if (!aboutDialog || aboutDialog.open) return;
+
+        // Keep Safari from auto-focusing the first button (and drawing a large
+        // focus ring around the close control) when the native dialog opens.
+        aboutDialog.tabIndex = -1;
         aboutDialog.showModal();
+        try {
+          aboutDialog.focus({ preventScroll: true });
+        } catch {
+          aboutDialog.focus();
+        }
+
         requestAnimationFrame(() => {
           requestAnimationFrame(() => aboutDialog.classList.add('is-visible'));
         });
@@ -903,7 +913,9 @@
         // scroll intent starts one CodePen-style sequence for desktop and mobile.
         if (projectsCard) gsap.set(projectsCard, { autoAlpha: 0, y: 34, scale: 0.965 });
         if (projectTags.length) gsap.set(projectTags, { autoAlpha: 0, y: 16 });
-        if (statHalves.length) gsap.set(statHalves, { autoAlpha: 0, y: 30, scale: 0.97 });
+        // Hide the complete stats card, not only its two inner halves. Otherwise
+        // the parent border remains visible as an empty rounded rectangle.
+        if (statsCard) gsap.set(statsCard, { autoAlpha: 0, y: 30, scale: 0.97 });
         if (ownerCard) gsap.set(ownerCard, { autoAlpha: 0, y: 30, scale: 0.97 });
         if (footer) gsap.set(footer, { autoAlpha: 0, y: 14 });
         if (darkNumber) darkNumber.textContent = '0';
@@ -946,13 +958,12 @@
             }, '-=0.34');
           }
 
-          if (statHalves.length) {
-            timeline.to(statHalves, {
+          if (statsCard) {
+            timeline.to(statsCard, {
               autoAlpha: 1,
               y: 0,
               scale: 1,
-              duration: 0.68,
-              stagger: 0.11,
+              duration: 0.72,
               ease: 'back.out(1.3)',
               clearProps: 'transform'
             }, '-=0.12');
