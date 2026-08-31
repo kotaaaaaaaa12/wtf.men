@@ -920,11 +920,14 @@
             })
             .from(projectsCard.querySelectorAll('.tag'), {
               autoAlpha: 0,
-              scale: 0.3,
-              duration: 0.62,
+              y: 16,
+              duration: 0.58,
               stagger: 0.06,
-              ease: 'back.out(2)'
-            }, '-=0.42');
+              ease: 'power3.out',
+              onComplete() {
+                gsap.set(projectsCard.querySelectorAll('.tag'), { clearProps: 'transform' });
+              }
+            }, '-=0.34');
         }
 
         if (statsCard) {
