@@ -1014,3 +1014,10 @@ button:focus-visible {
     justify-self: start;
   }
 }
+
+
+/* v33: hosted Browser.js web proxy */
+.tag.browserjs {
+  --tag-rotation: 1.5deg;
+  justify-self: start;
+}
