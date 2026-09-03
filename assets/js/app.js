@@ -349,7 +349,7 @@
       });
 
       timeline.to(counter, {
-        projects: 7,
+        projects: 8,
         percent: 100,
         duration: 0.78,
         ease: 'power2.out',
@@ -462,7 +462,7 @@
           }, '-=0.14');
 
           timeline.to(counter, {
-            projects: 7,
+            projects: 8,
             percent: 100,
             duration: 0.78,
             ease: 'power2.out',

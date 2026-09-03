@@ -286,6 +286,8 @@ nav {
   grid-column: 1 / -1;
 }
 
+.tag.pinless { --tag-rotation: -1.5deg; justify-self: end; }
+
 .stats-card {
   display: grid;
   grid-template-rows: 1fr 1fr;
