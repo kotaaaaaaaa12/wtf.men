@@ -349,7 +349,7 @@
       });
 
       timeline.to(counter, {
-        projects: 9,
+        projects: 11,
         percent: 100,
         duration: 0.78,
         ease: 'power2.out',
@@ -462,7 +462,7 @@
           }, '-=0.14');
 
           timeline.to(counter, {
-            projects: 9,
+            projects: 11,
             percent: 100,
             duration: 0.78,
             ease: 'power2.out',
@@ -510,3 +510,17 @@
   }
 
 })();
+
+
+// v35: Scroll to projects without adding #projects to the URL.
+const scrollProjectsButton = document.querySelector("[data-scroll-projects]");
+const projectsSection = document.getElementById("projects");
+
+if (scrollProjectsButton && projectsSection) {
+  scrollProjectsButton.addEventListener("click", () => {
+    projectsSection.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start"
+    });
+  });
+}

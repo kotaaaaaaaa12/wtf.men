@@ -1021,3 +1021,27 @@ button:focus-visible {
   --tag-rotation: 1.5deg;
   justify-self: start;
 }
+
+
+/* v34: hosted game projects */
+.tag.tetra-legend {
+  --tag-rotation: -2deg;
+  justify-self: end;
+}
+
+.tag.techmino {
+  --tag-rotation: 1.75deg;
+  justify-self: start;
+}
+
+
+/* v35: SCROLL DOWN scrolls without changing the URL hash */
+button.scroll-cue {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
