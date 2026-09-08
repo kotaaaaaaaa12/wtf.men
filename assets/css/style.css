@@ -1016,19 +1016,14 @@ button:focus-visible {
 }
 
 
-/* v33: hosted Browser.js web proxy */
+/* Hosted OSS: Browser.js */
 .tag.browserjs {
   --tag-rotation: 1.5deg;
   justify-self: start;
 }
 
 
-/* v34: hosted game projects */
-.tag.tetra-legend {
-  --tag-rotation: -2deg;
-  justify-self: end;
-}
-
+/* Hosted OSS projects */
 .tag.techmino {
   --tag-rotation: 1.75deg;
   justify-self: start;
