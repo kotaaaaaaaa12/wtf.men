@@ -1040,3 +1040,10 @@ button.scroll-cue {
   -webkit-appearance: none;
   appearance: none;
 }
+
+
+/* Hosted OSS: BugShot Roulette */
+.tag.bugshot {
+  --tag-rotation: -1.75deg;
+  justify-self: end;
+}
