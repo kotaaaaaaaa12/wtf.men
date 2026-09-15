@@ -1047,3 +1047,10 @@ button.scroll-cue {
   --tag-rotation: -1.75deg;
   justify-self: end;
 }
+
+
+/* YouTube Downloader */
+.tag.ytdownloader {
+  --tag-rotation: -1.5deg;
+  justify-self: end;
+}
