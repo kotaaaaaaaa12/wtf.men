@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/style.css?v=28">
+  <link rel="stylesheet" href="./assets/css/style.css?v=29">
 </head>
 <body>
   <div class="top-bar" aria-hidden="true"></div>
@@ -46,27 +46,26 @@
         <article class="card projects-card">
           <h2 class="card-title">Projects</h2>
           <div class="tags" aria-label="Projects">
-            <a class="tag black wishlist" href="https://wishlist.what-the-fuck.men/">Amazon Wishlist ↗</a>
-            <a class="tag white dakuten" href="https://dakuten.what-the-fuck.men/">Dakutenizer ↗</a>
-            <a class="tag black emulatorjs" href="https://emulatorjs.what-the-fuck.men/">Retro Games ↗</a>
-            <a class="tag white aamaker" href="https://aamaker.what-the-fuck.men/">AA Maker ↗</a>
-            <a class="tag black chaos-texture" href="https://2muu-texture-chaos.what-the-fuck.men/">2muu Chaos Texture ↗</a>
-            <a class="tag white chaos-maker" href="https://mc-chaos-texture-maker.what-the-fuck.men/">MC Chaos Maker ↗</a>
-            <a class="tag black booth-downloader" href="https://booth-downloader.what-the-fuck.men/">BOOTH Downloader ↗</a>
-            <a class="tag white pinless" href="https://pinless.what-the-fuck.men/">Pinless ↗</a>
-            <a class="tag black browserjs" href="https://browser.what-the-fuck.men/">Browser.js ↗</a>
-            <a class="tag white bugshot" href="https://bugshot.what-the-fuck.men/">BugShot Roulette ↗</a>
-            <a class="tag black techmino" href="https://techmino.what-the-fuck.men/">Techmino ↗</a>
-            <a class="tag white ytdownloader" href="https://ytdownloader.what-the-fuck.men/">YouTube Downloader ↗</a>
-            <a class="tag black whitebophir" href="https://whitebophir.what-the-fuck.men/">Whitebophir ↗</a>
-            <a class="tag white spotify" href="https://spotify.what-the-fuck.men/">Spotify ↗</a>
-            <a class="tag black redlib" href="https://redlib.what-the-fuck.men/">Redlib ↗</a>
+            <button class="tag black wishlist" type="button" data-project="wishlist">Amazon Wishlist</button>
+            <button class="tag white dakuten" type="button" data-project="dakuten">Dakutenizer</button>
+            <button class="tag black emulatorjs" type="button" data-project="emulatorjs">Retro Games</button>
+            <button class="tag white aamaker" type="button" data-project="aamaker">AA Maker</button>
+            <button class="tag black chaos-texture" type="button" data-project="chaos-texture">2muu Chaos Texture</button>
+            <button class="tag white chaos-maker" type="button" data-project="chaos-maker">MC Chaos Maker</button>
+            <button class="tag black booth-downloader" type="button" data-project="booth-downloader">BOOTH Downloader</button>
+            <button class="tag white pinless" type="button" data-project="pinless">Pinless</button>
+            <button class="tag black browserjs" type="button" data-project="browserjs">Browser.js</button>
+            <button class="tag white bugshot" type="button" data-project="bugshot">BugShot Roulette</button>
+            <button class="tag black techmino" type="button" data-project="techmino">Techmino</button>
+            <button class="tag white ytdownloader" type="button" data-project="ytdownloader">YouTube Downloader</button>
+            <button class="tag black whitebophir" type="button" data-project="whitebophir">Whitebophir</button>
+            <button class="tag black redlib" type="button" data-project="redlib">Redlib</button>
           </div>
         </article>
 
         <section class="stats-card" aria-label="Site stats">
           <div class="stat-half stat-dark">
-            <div class="stat-number">15</div>
+            <div class="stat-number">14</div>
             <p class="stat-desc">live projects currently living under this domain.</p>
           </div>
           <div class="stat-half stat-light">
@@ -107,6 +106,38 @@
       <span>made for fun</span>
     </footer>
   </div>
+
+
+  <dialog class="project-dialog" id="project-dialog" aria-labelledby="project-title">
+    <div class="project-panel">
+      <div class="project-top">
+        <span class="project-kicker">PROJECT</span>
+        <button class="project-close" type="button" data-project-close aria-label="Close project dialog">×</button>
+      </div>
+
+      <h2 id="project-title">Project</h2>
+
+      <div class="project-facts" aria-label="Project details">
+        <div>
+          <span>built with</span>
+          <strong id="project-built">—</strong>
+        </div>
+        <div>
+          <span>framework</span>
+          <strong id="project-framework">—</strong>
+        </div>
+        <div>
+          <span>hosted on</span>
+          <strong id="project-hosted">—</strong>
+        </div>
+      </div>
+
+      <div class="project-actions">
+        <a id="project-repo" href="#" target="_blank" rel="noopener noreferrer">Repo ↗</a>
+        <a id="project-page" href="#" target="_blank" rel="noopener noreferrer">Open project ↗</a>
+      </div>
+    </div>
+  </dialog>
 
   <dialog class="about-dialog" id="about-dialog" aria-labelledby="about-title">
     <div class="about-panel">
@@ -186,6 +217,6 @@
   </dialog>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="./assets/js/app.js?v=23"></script>
+  <script src="./assets/js/app.js?v=24"></script>
 </body>
 </html>

@@ -11,11 +11,186 @@
   const homeLink = document.querySelector('#home-link');
   const aboutDialog = document.querySelector('#about-dialog');
   const socialsDialog = document.querySelector('#socials-dialog');
+  const projectDialog = document.querySelector('#project-dialog');
 
   homeLink?.addEventListener('click', (event) => {
     event.preventDefault();
     history.replaceState(null, '', `${location.pathname}${location.search}`);
     window.scrollTo({ top: 0, left: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+  });
+
+
+  const projectData = {
+    wishlist: {
+      title: 'Amazon Wishlist',
+      built: 'JavaScript / HTML / CSS',
+      framework: 'None',
+      hosted: 'Cloudflare Workers + D1',
+      repo: 'https://github.com/kotaaaaaaaa12/amazon-wishlist-sync',
+      page: 'https://wishlist.what-the-fuck.men/'
+    },
+    dakuten: {
+      title: 'Dakutenizer',
+      built: 'HTML / CSS / JavaScript',
+      framework: 'None',
+      hosted: 'Cloudflare Pages',
+      repo: 'https://github.com/kotaaaaaaaa12/DaKuTeN',
+      page: 'https://dakuten.what-the-fuck.men/'
+    },
+    emulatorjs: {
+      title: 'Retro Games',
+      built: 'HTML / CSS / JavaScript',
+      framework: 'EmulatorJS',
+      hosted: 'Cloudflare Pages',
+      repo: 'https://github.com/kotaaaaaaaa12/EmulatorJS',
+      page: 'https://emulatorjs.what-the-fuck.men/'
+    },
+    aamaker: {
+      title: 'AA Maker',
+      built: 'HTML / CSS / JavaScript',
+      framework: 'None',
+      hosted: 'Cloudflare Pages',
+      repo: 'https://github.com/kotaaaaaaaa12/AA-maker',
+      page: 'https://aamaker.what-the-fuck.men/'
+    },
+    'chaos-texture': {
+      title: '2muu Chaos Texture',
+      built: 'HTML / CSS / JavaScript',
+      framework: 'None',
+      hosted: 'Cloudflare Pages',
+      repo: 'https://github.com/kotaaaaaaaa12/2muu-Texture-Chaos-Page',
+      page: 'https://2muu-texture-chaos.what-the-fuck.men/'
+    },
+    'chaos-maker': {
+      title: 'MC Chaos Maker',
+      built: 'HTML / CSS / JavaScript',
+      framework: 'JSZip',
+      hosted: 'Cloudflare Pages',
+      repo: 'https://github.com/kotaaaaaaaa12/minecraft-chaos-texture-maker',
+      page: 'https://mc-chaos-texture-maker.what-the-fuck.men/'
+    },
+    'booth-downloader': {
+      title: 'BOOTH Downloader',
+      built: 'HTML / CSS / JavaScript',
+      framework: 'None',
+      hosted: 'Cloudflare Pages',
+      repo: 'https://github.com/kotaaaaaaaa12/booth-downloader',
+      page: 'https://booth-downloader.what-the-fuck.men/'
+    },
+    pinless: {
+      title: 'Pinless',
+      built: 'Go',
+      framework: 'None',
+      hosted: 'Cloudflare Workers + Containers',
+      repo: 'https://github.com/kotaaaaaaaa12/pinless',
+      page: 'https://pinless.what-the-fuck.men/'
+    },
+    browserjs: {
+      title: 'Browser.js',
+      built: 'JavaScript / TypeScript',
+      framework: 'DreamlandJS / Scramjet',
+      hosted: 'Cloudflare Workers + Containers',
+      repo: 'https://github.com/kotaaaaaaaa12/browser.js',
+      page: 'https://browser.what-the-fuck.men/'
+    },
+    bugshot: {
+      title: 'BugShot Roulette',
+      built: 'React / TypeScript / Three.js',
+      framework: 'React + Vite',
+      hosted: 'Cloudflare Workers + Containers + D1',
+      repo: 'https://github.com/kotaaaaaaaa12/BugShot-Roulette',
+      page: 'https://bugshot.what-the-fuck.men/'
+    },
+    techmino: {
+      title: 'Techmino',
+      built: 'Lua / JavaScript',
+      framework: 'LÖVE / love.js',
+      hosted: 'Cloudflare Pages + multiplayer backend',
+      repo: 'https://github.com/kotaaaaaaaa12/Techmino',
+      page: 'https://techmino.what-the-fuck.men/'
+    },
+    ytdownloader: {
+      title: 'YouTube Downloader',
+      built: 'JavaScript / yt-dlp / FFmpeg',
+      framework: 'None',
+      hosted: 'Cloudflare Workers + Containers',
+      repo: 'https://github.com/kotaaaaaaaa12/ytdownloader',
+      page: 'https://ytdownloader.what-the-fuck.men/'
+    },
+    whitebophir: {
+      title: 'Whitebophir',
+      built: 'Node.js / JavaScript',
+      framework: 'Socket.IO',
+      hosted: 'Cloudflare Workers + Containers',
+      repo: 'https://github.com/kotaaaaaaaa12/whitebophir',
+      page: 'https://whitebophir.what-the-fuck.men/'
+    },
+    redlib: {
+      title: 'Redlib',
+      built: 'Rust',
+      framework: 'Askama / Tokio',
+      hosted: 'Cloudflare Workers + Containers',
+      repo: 'https://github.com/kotaaaaaaaa12/redlib',
+      page: 'https://redlib.what-the-fuck.men/'
+    }
+  };
+
+  function openProjectDialog(key) {
+    const data = projectData[key];
+    if (!projectDialog || !data || projectDialog.open) return;
+
+    projectDialog.querySelector('#project-title').textContent = data.title;
+    projectDialog.querySelector('#project-built').textContent = data.built;
+    projectDialog.querySelector('#project-framework').textContent = data.framework;
+    projectDialog.querySelector('#project-hosted').textContent = data.hosted;
+    projectDialog.querySelector('#project-repo').href = data.repo;
+    projectDialog.querySelector('#project-page').href = data.page;
+
+    projectDialog.tabIndex = -1;
+    projectDialog.showModal();
+
+    try {
+      projectDialog.focus({ preventScroll: true });
+    } catch {
+      projectDialog.focus();
+    }
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => projectDialog.classList.add('is-visible'));
+    });
+  }
+
+  function closeProjectDialog() {
+    if (!projectDialog?.open) return;
+    projectDialog.classList.remove('is-visible');
+
+    if (reducedMotion) {
+      projectDialog.close();
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (projectDialog.open) projectDialog.close();
+    }, 220);
+  }
+
+  document.querySelectorAll('[data-project]').forEach((button) => {
+    button.addEventListener('click', () => {
+      openProjectDialog(button.getAttribute('data-project'));
+    });
+  });
+
+  document.querySelectorAll('[data-project-close]').forEach((button) => {
+    button.addEventListener('click', closeProjectDialog);
+  });
+
+  projectDialog?.addEventListener('click', (event) => {
+    if (event.target === projectDialog) closeProjectDialog();
+  });
+
+  projectDialog?.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    closeProjectDialog();
   });
 
   function openAboutDialog() {
@@ -349,7 +524,7 @@
       });
 
       timeline.to(counter, {
-        projects: 15,
+        projects: 14,
         percent: 100,
         duration: 0.78,
         ease: 'power2.out',
@@ -462,7 +637,7 @@
           }, '-=0.14');
 
           timeline.to(counter, {
-            projects: 15,
+            projects: 14,
             percent: 100,
             duration: 0.78,
             ease: 'power2.out',
