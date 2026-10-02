@@ -1469,3 +1469,35 @@ button.scroll-cue {
     --tag-y: 0px !important;
   }
 }
+
+
+/* v47: tablet/iPad gets the same scattered sticker density as phones */
+@media (min-width: 681px) and (max-width: 1100px) {
+  .tags {
+    justify-content: space-evenly;
+    gap: 17px 8px;
+    padding: 20px 5px 24px;
+  }
+
+  .tags .tag {
+    min-height: 42px;
+    padding-inline: 12px;
+    font-size: 11px;
+    margin: 0 !important;
+    --tag-x: 0px !important;
+    --tag-y: 0px !important;
+  }
+
+  /* Keep rows visually irregular without letting stickers collide. */
+  .tags .tag:nth-child(3n + 1) {
+    align-self: flex-start;
+  }
+
+  .tags .tag:nth-child(3n + 2) {
+    align-self: center;
+  }
+
+  .tags .tag:nth-child(3n) {
+    align-self: flex-end;
+  }
+}
