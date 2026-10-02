@@ -1422,46 +1422,13 @@ button.scroll-cue {
 }
 
 
-/* v44: keep the fridge-door chaos, but give each sticker more breathing room */
+/* v45: preserve v43's messy fridge-door layout; only add more breathing room */
 .tags {
-  gap: 18px 12px;
-  padding: 24px 12px 28px;
-  justify-content: flex-start;
+  gap: 16px 10px;
 }
-
-.tags .tag {
-  margin: 0 !important;
-}
-
-/* Softer offsets than v43 so labels don't visually pile on top of each other. */
-.tags .tag:nth-child(1)  { --tag-x: 4px;   --tag-y: 5px;   --tag-scale: 1.02; }
-.tags .tag:nth-child(2)  { --tag-x: 10px;  --tag-y: -4px;  --tag-scale: .98; }
-.tags .tag:nth-child(3)  { --tag-x: -2px;  --tag-y: 7px;   --tag-scale: 1.01; }
-.tags .tag:nth-child(4)  { --tag-x: 6px;   --tag-y: 2px;   --tag-scale: .97; }
-.tags .tag:nth-child(5)  { --tag-x: 12px;  --tag-y: -5px;  --tag-scale: 1.03; }
-.tags .tag:nth-child(6)  { --tag-x: -5px;  --tag-y: 6px;   --tag-scale: .99; }
-.tags .tag:nth-child(7)  { --tag-x: 8px;   --tag-y: 3px;   --tag-scale: 1.01; }
-.tags .tag:nth-child(8)  { --tag-x: -3px;  --tag-y: -5px;  --tag-scale: .98; }
-.tags .tag:nth-child(9)  { --tag-x: 10px;  --tag-y: 6px;   --tag-scale: 1.02; }
-.tags .tag:nth-child(10) { --tag-x: -6px;  --tag-y: 1px;   --tag-scale: .99; }
-.tags .tag:nth-child(11) { --tag-x: 9px;   --tag-y: -4px;  --tag-scale: .98; }
-.tags .tag:nth-child(12) { --tag-x: -4px;  --tag-y: 7px;   --tag-scale: 1.03; }
-.tags .tag:nth-child(13) { --tag-x: 7px;   --tag-y: -2px;  --tag-scale: .99; }
-.tags .tag:nth-child(14) { --tag-x: -2px;  --tag-y: 5px;   --tag-scale: 1.01; }
 
 @media (max-width: 680px) {
   .tags {
-    gap: 15px 8px;
-    padding: 18px 5px 22px;
-    justify-content: flex-start;
+    gap: 14px 7px;
   }
-
-  .tags .tag:nth-child(4n + 1) { --tag-x: 3px; }
-  .tags .tag:nth-child(4n + 2) { --tag-x: -2px; }
-  .tags .tag:nth-child(4n + 3) { --tag-x: 2px; }
-  .tags .tag:nth-child(4n)     { --tag-x: -3px; }
-
-  .tags .tag:nth-child(3n + 1) { --tag-y: 3px; }
-  .tags .tag:nth-child(3n + 2) { --tag-y: -3px; }
-  .tags .tag:nth-child(3n)     { --tag-y: 1px; }
 }
