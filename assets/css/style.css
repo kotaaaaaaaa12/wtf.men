@@ -1061,3 +1061,94 @@ button.scroll-cue {
   --tag-rotation: 1.5deg;
   justify-self: start;
 }
+
+
+/* v42: loose sticker-wall project layout */
+.projects-card {
+  min-height: 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: flex-start;
+  gap: 15px 13px;
+  min-height: 0;
+  margin-top: 24px;
+  padding: 10px 4px 14px;
+}
+
+.tags .tag {
+  --tag-x: 0px;
+  --tag-y: 0px;
+  flex: 0 0 auto;
+  grid-column: auto !important;
+  justify-self: auto !important;
+  margin: 0;
+  transform: translate(var(--tag-x), var(--tag-y)) rotate(var(--tag-rotation));
+}
+
+/* Deliberately uneven offsets — like labels stuck on by hand. */
+.tags .tag:nth-child(1)  { --tag-x: 2px;   --tag-y: 1px; }
+.tags .tag:nth-child(2)  { --tag-x: 14px;  --tag-y: -5px; }
+.tags .tag:nth-child(3)  { --tag-x: -3px;  --tag-y: 7px; }
+.tags .tag:nth-child(4)  { --tag-x: 8px;   --tag-y: 1px; }
+.tags .tag:nth-child(5)  { --tag-x: 19px;  --tag-y: -4px; }
+.tags .tag:nth-child(6)  { --tag-x: -6px;  --tag-y: 6px; }
+.tags .tag:nth-child(7)  { --tag-x: 10px;  --tag-y: 3px; }
+.tags .tag:nth-child(8)  { --tag-x: -4px;  --tag-y: -6px; }
+.tags .tag:nth-child(9)  { --tag-x: 17px;  --tag-y: 5px; }
+.tags .tag:nth-child(10) { --tag-x: 0px;   --tag-y: -3px; }
+.tags .tag:nth-child(11) { --tag-x: 7px;   --tag-y: 6px; }
+.tags .tag:nth-child(12) { --tag-x: -7px;  --tag-y: 0px; }
+.tags .tag:nth-child(13) { --tag-x: 15px;  --tag-y: -5px; }
+.tags .tag:nth-child(14) { --tag-x: -1px;  --tag-y: 5px; }
+.tags .tag:nth-child(15) { --tag-x: 10px;  --tag-y: -2px; }
+
+.tag.spotify {
+  --tag-rotation: -2.25deg;
+}
+
+.tag.redlib {
+  --tag-rotation: 2deg;
+}
+
+/* Keep the collage loose on phones without pushing labels out of the card. */
+@media (max-width: 680px) {
+  .projects-card {
+    min-height: 0;
+  }
+
+  .tags {
+    display: flex;
+    min-height: 0;
+    gap: 14px 9px;
+    align-content: flex-start;
+    padding: 8px 2px 10px;
+  }
+
+  .tags .tag {
+    grid-column: auto !important;
+    justify-self: auto !important;
+  }
+
+  .tags .tag:nth-child(3n + 1) { --tag-x: 1px;  }
+  .tags .tag:nth-child(3n + 2) { --tag-x: 5px;  }
+  .tags .tag:nth-child(3n)     { --tag-x: -2px; }
+
+  .tags .tag:nth-child(odd)  { --tag-y: 2px; }
+  .tags .tag:nth-child(even) { --tag-y: -2px; }
+}
+
+@media (max-width: 390px) {
+  .tags {
+    gap: 12px 7px;
+  }
+
+  .tags .tag {
+    font-size: 10px;
+    padding-inline: 10px;
+  }
+}
