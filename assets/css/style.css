@@ -1422,13 +1422,50 @@ button.scroll-cue {
 }
 
 
-/* v45: preserve v43's messy fridge-door layout; only add more breathing room */
+/* v46: messy fridge-door layout without sticker overlap */
 .tags {
-  gap: 16px 10px;
+  gap: 18px 12px;
+}
+
+.tags .tag {
+  margin: 0 !important;
+  --tag-x: 0px !important;
+  --tag-y: 0px !important;
+}
+
+/* Keep only the hand-placed rotation + subtle scale differences. */
+.tags .tag:nth-child(1)  { --tag-rotation: -6deg;   --tag-scale: 1.03; }
+.tags .tag:nth-child(2)  { --tag-rotation: 4.5deg;  --tag-scale: .96; }
+.tags .tag:nth-child(3)  { --tag-rotation: 7deg;    --tag-scale: 1.01; }
+.tags .tag:nth-child(4)  { --tag-rotation: -3.5deg; --tag-scale: .94; }
+.tags .tag:nth-child(5)  { --tag-rotation: 5.5deg;  --tag-scale: 1.05; }
+.tags .tag:nth-child(6)  { --tag-rotation: -7deg;   --tag-scale: .98; }
+.tags .tag:nth-child(7)  { --tag-rotation: 2.5deg;  --tag-scale: 1.02; }
+.tags .tag:nth-child(8)  { --tag-rotation: -5deg;   --tag-scale: .95; }
+.tags .tag:nth-child(9)  { --tag-rotation: 6.5deg;  --tag-scale: 1.04; }
+.tags .tag:nth-child(10) { --tag-rotation: -2deg;   --tag-scale: .97; }
+.tags .tag:nth-child(11) { --tag-rotation: 7.5deg;  --tag-scale: .94; }
+.tags .tag:nth-child(12) { --tag-rotation: -5.5deg; --tag-scale: 1.05; }
+.tags .tag:nth-child(13) { --tag-rotation: 3.5deg;  --tag-scale: .98; }
+.tags .tag:nth-child(14) { --tag-rotation: -7.5deg; --tag-scale: 1.02; }
+
+@media (hover: hover) and (pointer: fine) {
+  .tags .tag:hover {
+    z-index: 20;
+    transform:
+      translateY(-3px)
+      rotate(calc(var(--tag-rotation) * .45))
+      scale(calc(var(--tag-scale) * 1.035));
+  }
 }
 
 @media (max-width: 680px) {
   .tags {
-    gap: 14px 7px;
+    gap: 15px 8px;
+  }
+
+  .tags .tag {
+    --tag-x: 0px !important;
+    --tag-y: 0px !important;
   }
 }
