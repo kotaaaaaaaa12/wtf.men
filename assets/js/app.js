@@ -79,6 +79,7 @@
     },
     pinless: {
       title: 'Pinless',
+      type: 'OSS',
       built: 'Go',
       framework: 'None',
       hosted: 'Cloudflare Workers + Containers',
@@ -87,6 +88,7 @@
     },
     browserjs: {
       title: 'Browser.js',
+      type: 'OSS',
       built: 'JavaScript / TypeScript',
       framework: 'DreamlandJS / Scramjet',
       hosted: 'Cloudflare Workers + Containers',
@@ -95,6 +97,7 @@
     },
     bugshot: {
       title: 'BugShot Roulette',
+      type: 'OSS',
       built: 'React / TypeScript / Three.js',
       framework: 'React + Vite',
       hosted: 'Cloudflare Workers + Containers + D1',
@@ -103,6 +106,7 @@
     },
     techmino: {
       title: 'Techmino',
+      type: 'OSS',
       built: 'Lua / JavaScript',
       framework: 'LÖVE / love.js',
       hosted: 'Cloudflare Pages + multiplayer backend',
@@ -119,6 +123,7 @@
     },
     whitebophir: {
       title: 'Whitebophir',
+      type: 'OSS',
       built: 'Node.js / JavaScript',
       framework: 'Socket.IO',
       hosted: 'Cloudflare Workers + Containers',
@@ -127,6 +132,7 @@
     },
     redlib: {
       title: 'Redlib',
+      type: 'OSS',
       built: 'Rust',
       framework: 'Askama / Tokio',
       hosted: 'Cloudflare Workers + Containers',
@@ -140,6 +146,18 @@
     if (!projectDialog || !data || projectDialog.open) return;
 
     projectDialog.querySelector('#project-title').textContent = data.title;
+
+    const typeBadge = projectDialog.querySelector('#project-type-badge');
+    if (typeBadge) {
+      if (data.type) {
+        typeBadge.textContent = data.type;
+        typeBadge.hidden = false;
+      } else {
+        typeBadge.textContent = '';
+        typeBadge.hidden = true;
+      }
+    }
+
     projectDialog.querySelector('#project-built').textContent = data.built;
     projectDialog.querySelector('#project-framework').textContent = data.framework;
     projectDialog.querySelector('#project-hosted').textContent = data.hosted;
