@@ -138,6 +138,14 @@
       hosted: 'Cloudflare Workers + Containers',
       repo: 'https://github.com/kotaaaaaaaa12/redlib',
       page: 'https://redlib.what-the-fuck.men/'
+    },
+    clock: {
+      title: 'Clock',
+      built: 'HTML / CSS / JavaScript',
+      framework: 'None',
+      hosted: 'Cloudflare Pages',
+      repo: 'https://github.com/kotaaaaaaaa12/still-clock',
+      page: 'https://clock.what-the-fuck.men/'
     }
   };
 
@@ -542,7 +550,7 @@
       });
 
       timeline.to(counter, {
-        projects: 14,
+        projects: 15,
         percent: 100,
         duration: 0.78,
         ease: 'power2.out',
@@ -655,7 +663,7 @@
           }, '-=0.14');
 
           timeline.to(counter, {
-            projects: 14,
+            projects: 15,
             percent: 100,
             duration: 0.78,
             ease: 'power2.out',

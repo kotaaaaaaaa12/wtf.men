@@ -1645,3 +1645,16 @@ button.scroll-cue {
     font-size: 9px;
   }
 }
+
+
+/* v52: Clock project */
+.tag.clock {
+  --tag-rotation: 5deg;
+}
+
+.tags .tag:nth-child(15) {
+  --tag-rotation: 5deg;
+  --tag-scale: 1.01;
+  --tag-x: 0px !important;
+  --tag-y: 0px !important;
+}
