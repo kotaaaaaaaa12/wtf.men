@@ -1658,3 +1658,16 @@ button.scroll-cue {
   --tag-x: 0px !important;
   --tag-y: 0px !important;
 }
+
+
+/* v53: Beatbump project */
+.tag.beatbump {
+  --tag-rotation: -4deg;
+}
+
+.tags .tag:nth-child(16) {
+  --tag-rotation: -4deg;
+  --tag-scale: .99;
+  --tag-x: 0px !important;
+  --tag-y: 0px !important;
+}

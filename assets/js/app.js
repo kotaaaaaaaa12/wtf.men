@@ -146,6 +146,15 @@
       hosted: 'Cloudflare Pages',
       repo: 'https://github.com/kotaaaaaaaa12/still-clock',
       page: 'https://clock.what-the-fuck.men/'
+    },
+    beatbump: {
+      title: 'Beatbump',
+      type: 'OSS',
+      built: 'Svelte / TypeScript / Go',
+      framework: 'SvelteKit',
+      hosted: 'Cloudflare Workers + Containers',
+      repo: 'https://github.com/kotaaaaaaaa12/Beatbump',
+      page: 'https://beatbump.what-the-fuck.men/'
     }
   };
 
@@ -550,7 +559,7 @@
       });
 
       timeline.to(counter, {
-        projects: 15,
+        projects: 16,
         percent: 100,
         duration: 0.78,
         ease: 'power2.out',
@@ -663,7 +672,7 @@
           }, '-=0.14');
 
           timeline.to(counter, {
-            projects: 15,
+            projects: 16,
             percent: 100,
             duration: 0.78,
             ease: 'power2.out',
