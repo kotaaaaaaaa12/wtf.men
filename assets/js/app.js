@@ -77,68 +77,6 @@
       repo: 'https://github.com/kotaaaaaaaa12/booth-downloader',
       page: 'https://booth-downloader.what-the-fuck.men/'
     },
-    pinless: {
-      title: 'Pinless',
-      type: 'OSS',
-      built: 'Go',
-      framework: 'None',
-      hosted: 'Cloudflare Workers + Containers',
-      repo: 'https://github.com/kotaaaaaaaa12/pinless',
-      page: 'https://pinless.what-the-fuck.men/'
-    },
-    browserjs: {
-      title: 'Browser.js',
-      type: 'OSS',
-      built: 'JavaScript / TypeScript',
-      framework: 'DreamlandJS / Scramjet',
-      hosted: 'Cloudflare Workers + Containers',
-      repo: 'https://github.com/kotaaaaaaaa12/browser.js',
-      page: 'https://browser.what-the-fuck.men/'
-    },
-    bugshot: {
-      title: 'BugShot Roulette',
-      type: 'OSS',
-      built: 'React / TypeScript / Three.js',
-      framework: 'React + Vite',
-      hosted: 'Cloudflare Workers + Containers + D1',
-      repo: 'https://github.com/kotaaaaaaaa12/BugShot-Roulette',
-      page: 'https://bugshot.what-the-fuck.men/'
-    },
-    techmino: {
-      title: 'Techmino',
-      type: 'OSS',
-      built: 'Lua / JavaScript',
-      framework: 'LÖVE / love.js',
-      hosted: 'Cloudflare Pages + multiplayer backend',
-      repo: 'https://github.com/kotaaaaaaaa12/Techmino',
-      page: 'https://techmino.what-the-fuck.men/'
-    },
-    ytdownloader: {
-      title: 'YouTube Downloader',
-      built: 'JavaScript / yt-dlp / FFmpeg',
-      framework: 'None',
-      hosted: 'Cloudflare Workers + Containers',
-      repo: 'https://github.com/kotaaaaaaaa12/ytdownloader',
-      page: 'https://ytdownloader.what-the-fuck.men/'
-    },
-    whitebophir: {
-      title: 'Whitebophir',
-      type: 'OSS',
-      built: 'Node.js / JavaScript',
-      framework: 'Socket.IO',
-      hosted: 'Cloudflare Workers + Containers',
-      repo: 'https://github.com/kotaaaaaaaa12/whitebophir',
-      page: 'https://whitebophir.what-the-fuck.men/'
-    },
-    redlib: {
-      title: 'Redlib',
-      type: 'OSS',
-      built: 'Rust',
-      framework: 'Askama / Tokio',
-      hosted: 'Cloudflare Workers + Containers',
-      repo: 'https://github.com/kotaaaaaaaa12/redlib',
-      page: 'https://redlib.what-the-fuck.men/'
-    },
     clock: {
       title: 'Clock',
       built: 'HTML / CSS / JavaScript',
@@ -147,15 +85,6 @@
       repo: 'https://github.com/kotaaaaaaaa12/still-clock',
       page: 'https://clock.what-the-fuck.men/'
     },
-    beatbump: {
-      title: 'Beatbump',
-      type: 'OSS',
-      built: 'Svelte / TypeScript / Go',
-      framework: 'SvelteKit',
-      hosted: 'Cloudflare Workers + Containers',
-      repo: 'https://github.com/kotaaaaaaaa12/Beatbump',
-      page: 'https://beatbump.what-the-fuck.men/'
-    }
   };
 
   function openProjectDialog(key) {
@@ -559,7 +488,7 @@
       });
 
       timeline.to(counter, {
-        projects: 16,
+        projects: 8,
         percent: 100,
         duration: 0.78,
         ease: 'power2.out',
@@ -672,7 +601,7 @@
           }, '-=0.14');
 
           timeline.to(counter, {
-            projects: 16,
+            projects: 8,
             percent: 100,
             duration: 0.78,
             ease: 'power2.out',
