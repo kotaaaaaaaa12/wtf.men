@@ -43,7 +43,7 @@
       framework: 'EmulatorJS',
       hosted: 'Cloudflare Pages',
       repo: 'https://github.com/kotaaaaaaaa12/EmulatorJS',
-      page: 'https://emulatorjs.what-the-fuck.men/'
+      page: 'https://retrovault.what-the-fuck.men/'
     },
     aamaker: {
       title: 'AA Maker',
